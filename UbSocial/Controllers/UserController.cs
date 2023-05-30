@@ -15,6 +15,7 @@ namespace UbSocial.Controllers
 
         [HttpPost]
         [Route("userLogin")]
+        //await
         public async Task<IActionResult> Login(User user)
         {
             string token;
@@ -23,7 +24,7 @@ namespace UbSocial.Controllers
                 if (user.Password != null && user.Email != null)
                 {
                     Dictionary<string, object> args = new Dictionary<string, object> {
-                     {"pUsername",user.Email},
+                     {"pEmail",user.Email},
                      {"pPassword",user.Password},
                     };
 
@@ -31,7 +32,6 @@ namespace UbSocial.Controllers
                     if (success == "true")
                     {
                         token = JWT.GenerateToken(user);
-                        
                         RefreshToken refreshToken = JWT.GenerateRefreshToken();
 
                         return Ok(token);
@@ -53,7 +53,15 @@ namespace UbSocial.Controllers
             {
                 if (user.Password != null && user.Email != null && user.Name != null && user.Surname != null)
                 {
-                    return Ok(user.Create(user));
+                    success = user.Create(user);
+                    if (success == "1")
+                    {
+                        return Ok();
+                    }
+                    else
+                    {
+                        return StatusCode(500, success);
+                    }
                 }
                 else
                 {

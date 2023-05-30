@@ -16,7 +16,7 @@ namespace UbSocial.Models.Helpers
             {
 
                 _connection = new SqlConnection(_connectionString);
-                _connection.Open(); 
+                _connection.Open();
 
             }
 
