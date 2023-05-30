@@ -15,6 +15,7 @@ namespace UbSocial.Controllers
 
         [HttpPost]
         [Route("userLogin")]
+        //await
         public async Task<IActionResult> Login(User user)
         {
             string token;
