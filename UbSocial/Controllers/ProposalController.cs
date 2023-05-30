@@ -45,18 +45,26 @@ namespace UBSocial.Controllers
             string success = "Error al eliminar la propuesta";
             try
             {
-                Dictionary<string, object> args = new Dictionary<string, object> {
-                    {"pId",id}
-                };
-
-                success = DBHelper.CallNonQuery("spProposalDelete", args);
-
-                if (success == "1")
+                if (id >= 0)
                 {
-                    return Ok();
+
+                    Dictionary<string, object> args = new Dictionary<string, object> {
+
+                    {"pId",id}
+
+                    };
+
+                    success = DBHelper.CallNonQuery("spProposalDelete", args);
+
+                    if (success == "1")
+                    {
+                        return Ok();
+                    }
+
                 }
 
                 return StatusCode(500, success);
+                
             }
             catch
             {
@@ -101,11 +109,12 @@ namespace UBSocial.Controllers
             string success = "Error al modificar la propuesta";
             try
             {
-                if (proposal.Title != null && proposal.Description != null)
+                if (proposal.Title != null && proposal.Description != null && proposal.Id != null)
                 {
                     Dictionary<string, object> args = new Dictionary<string, object> {
                          {"pTitle",proposal.Title},
-                         {"pDescription",proposal.Description}
+                         {"pDescription",proposal.Description},
+                         {"pId", proposal.Id},
                     };
                     success = DBHelper.CallNonQuery("spProposalUpdate", args);
                     if (success == "1")
