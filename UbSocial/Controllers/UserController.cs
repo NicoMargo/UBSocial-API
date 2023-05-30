@@ -31,6 +31,7 @@ namespace UbSocial.Controllers
                     if (success == "true")
                     {
                         token = JWT.GenerateToken(user);
+                        
                         RefreshToken refreshToken = JWT.GenerateRefreshToken();
 
                         return Ok(token);
