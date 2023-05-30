@@ -10,7 +10,7 @@ namespace UbSocial.Models.Helpers
     {
         public static string GenerateToken(User user)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("9FKIW7hfFESfse1Dc3!56ZhGYi"));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("9FKIW7hfFlkfdsfjglkjfasdf"));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             //Create claims
@@ -21,7 +21,7 @@ namespace UbSocial.Models.Helpers
 
             //Create token
             var token = new JwtSecurityToken(
-                "api.it-arg.com",
+                "api.UBSocial.com",
                 "User",
                 claims,
                 expires: DateTime.Now.AddDays(7),
