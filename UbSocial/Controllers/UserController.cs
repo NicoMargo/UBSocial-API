@@ -43,15 +43,53 @@ namespace UbSocial.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult UserGet()
+        {
+            try
+            {
+                return Ok(DBHelper.callProcedureReader("spUserGetAll", new Dictionary<string, object> { }));
+            }
+            catch
+            {
+                return StatusCode(500, "Error al obtener la informacion de los usuarios");
+            }
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult UserGetById(int id)
+        {
+            try
+            {
+                Dictionary<string, object> args = new Dictionary<string, object> {
+                    {"pId",id}
+                };
+                return Ok(DBHelper.callProcedureReader("spUserGetById", args));
+            }
+            catch
+            {
+                return StatusCode(500, "Error al obtener la informacion del usuario");
+            }
+        }
+
         [HttpPost]
         public IActionResult Create(User user)
         {
             string success = "";
             try
             {
-                if (user.Password != null && user.Email != null && user.Name != null && user.Surname != null)
+                if (user.Password != null && user.Email != null && user.Name != null && user.Surname != null && user.Admin != null)
                 {
-                    success = user.Create(user);
+                    Dictionary<string, object> args = new Dictionary<string, object> {
+                    {"pEmail",user.Email},
+                    {"pPassword",user.Password},
+                    {"pName",user.Name},
+                    {"pSurname",user.Surname},
+                    {"pAdmin",user.Admin}
+            };
+
+                    success = DBHelper.CallNonQuery("spUserCreate", args);
+
                     if (success == "1")
                     {
                         return Ok();
@@ -100,5 +138,43 @@ namespace UbSocial.Controllers
             }
 
         }
+
+        [HttpPut]
+        public IActionResult Update(User user)
+        {
+            string success = "Error al modificar el usuario";
+            try
+            {
+                if (user.Email != null && user.Password != null && user.Name != null && user.Surname != null && user.Id != null)
+                {
+                    Dictionary<string, object> args = new Dictionary<string, object> {
+                         {"pEmail",user.Email},
+                         {"pPassword",user.Password},
+                         {"pName",user.Name},
+                         {"pSurname",user.Surname},
+                         {"pId",user.Id}
+                    };
+                    success = DBHelper.CallNonQuery("spUserUpdate", args);
+                    if (success == "1")
+                    {
+                        return Ok();
+                    }
+                    else
+                    {
+                        return StatusCode(500, success);
+                    }
+                }
+                else
+                {
+                    success = "Hay campos que no pueden estar vacios";
+                }
+            }
+            catch
+            {
+            }
+            return StatusCode(500, success);
+        }
+
     }
+
 }
