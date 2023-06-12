@@ -123,7 +123,7 @@ namespace UBSocial.Controllers
 
                     };
 
-                    success = DBHelper.CallNonQuery("spActivityUpdate", args);
+                    success = DBHelper.CallNonQuery("spDownloadableContentUpdate", args);
 
                     if (success == "1")
                     {
