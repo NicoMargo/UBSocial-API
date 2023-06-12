@@ -8,41 +8,41 @@ namespace UBSocial.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class ActivityController : ControllerBase
+    public class DownloadableContentController : ControllerBase
     {
         [HttpGet]
-        public IActionResult ActivityGet()
+        public IActionResult DownloadableContentGet()
         {
             try
             {
-                return Ok(DBHelper.callProcedureReader("spActivityGetAll", new Dictionary<string, object> { }));
+                return Ok(DBHelper.callProcedureReader("spDownloadableContentGetAll", new Dictionary<string, object> { }));
             }
             catch
             {
-                return StatusCode(500, "Error al obtener la informacion de las actividades");
+                return StatusCode(500, "Error al obtener la informacion del contenido");
             }
         }
 
         [HttpGet("{id}")]
-        public IActionResult ActivityGetById(int id)
+        public IActionResult DownloadableContentGetById(int id)
         {
             try
             {
                 Dictionary<string, object> args = new Dictionary<string, object> {
                     {"pId",id}
                 };
-                return Ok(DBHelper.callProcedureReader("spActivityGetById", args));
+                return Ok(DBHelper.callProcedureReader("spDownloadableContentGetById", args));
             }
             catch
             {
-                return StatusCode(500, "Error al obtener la informacion de las actividades");
+                return StatusCode(500, "Error al obtener la informacion del contenido");
             }
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            string success = "Error al eliminar la actividad";
+            string success = "Error al eliminar el contenido";
             try
             {
                 if (id >= 0)
@@ -54,7 +54,7 @@ namespace UBSocial.Controllers
 
                     };
 
-                    success = DBHelper.CallNonQuery("spActivityDelete", args);
+                    success = DBHelper.CallNonQuery("spDownloadableContentDelete", args);
 
                     if (success == "1")
                     {
@@ -75,21 +75,20 @@ namespace UBSocial.Controllers
         [HttpPost]
         [Authorize]
 
-        public IActionResult Create(Activity activity)
+        public IActionResult Create(DownloadableContent downloadableContent)
         {
-            string success = "Error al crear la actividad";
+            string success = "Error al crear el contenido";
             try
             {
-                if (activity.Title != null && activity.Description != null && activity.Id != null && activity.Contact != null && activity.URLPhotos != null)
+                if (downloadableContent.Title != null && downloadableContent.Description != null && downloadableContent.URL != null && downloadableContent.DownloadableContentDate != null)
                 {
                     Dictionary<string, object> args = new Dictionary<string, object> {
-                         {"pTitle",activity.Title},
-                         {"pDescription",activity.Description},
-                         {"pContact",activity.Contact},
-                         {"pURLPhotos",activity.URLPhotos},
-                         {"pActivityDate",activity.ActivityDate},
+                         {"pTitle",downloadableContent.Title},
+                         {"pDescription",downloadableContent.Description},
+                         {"pURLPhotos",downloadableContent.URL},
+                         {"pDownloadableContentDate",downloadableContent.DownloadableContentDate},
                     };
-                    success = DBHelper.CallNonQuery("spActivityCreate", args);
+                    success = DBHelper.CallNonQuery("spDownloadableContentCreate", args);
                     if (success == "1")
                     {
                         return Ok();
@@ -107,24 +106,25 @@ namespace UBSocial.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update(Activity activity)
+        public IActionResult Update(DownloadableContent downloadableContent)
         {
-            string success = "Error al modificar la actividad";
+            string success = "Error al modificar el contenido";
             try
             {
-                if (activity.Title != null && activity.Description != null && activity.Id != null && activity.Contact != null && activity.ActivityDate != null && activity.URLPhotos != null) 
+                if (downloadableContent.Title != null && downloadableContent.Description != null && downloadableContent.URL != null && downloadableContent.DownloadableContentDate != null && downloadableContent.Id != null)
                 {
                     Dictionary<string, object> args = new Dictionary<string, object> {
-                         {"pTitle",activity.Title},
-                         {"pDescription",activity.Description},
-                         {"pId", activity.Id},
-                         {"pContact",activity.Contact},
-                         {"pURLPhotos",activity.URLPhotos},
-                         {"pActivityDate",activity.ActivityDate},
+                        {"pTitle",downloadableContent.Title},
+                        {"pDescription",downloadableContent.Description},
+                        {"pURLPhotos",downloadableContent.URL},
+                        {"pDownloadableContentDate",downloadableContent.DownloadableContentDate},
+                        {"pId",downloadableContent.Id},
+
+
                     };
 
                     success = DBHelper.CallNonQuery("spActivityUpdate", args);
-                    
+
                     if (success == "1")
                     {
                         return Ok();
