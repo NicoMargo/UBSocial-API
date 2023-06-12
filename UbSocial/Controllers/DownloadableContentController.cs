@@ -80,11 +80,10 @@ namespace UBSocial.Controllers
             string success = "Error al crear el contenido";
             try
             {
-                if (downloadableContent.Title != null && downloadableContent.Description != null && downloadableContent.URL != null && downloadableContent.DownloadableContentDate != null)
+                if (downloadableContent.Title != null && downloadableContent.URL != null && downloadableContent.DownloadableContentDate != null)
                 {
                     Dictionary<string, object> args = new Dictionary<string, object> {
                          {"pTitle",downloadableContent.Title},
-                         {"pDescription",downloadableContent.Description},
                          {"pURLPhotos",downloadableContent.URL},
                          {"pDownloadableContentDate",downloadableContent.DownloadableContentDate},
                     };
@@ -111,11 +110,10 @@ namespace UBSocial.Controllers
             string success = "Error al modificar el contenido";
             try
             {
-                if (downloadableContent.Title != null && downloadableContent.Description != null && downloadableContent.URL != null && downloadableContent.DownloadableContentDate != null && downloadableContent.Id != null)
+                if (downloadableContent.Title != null && downloadableContent.URL != null && downloadableContent.DownloadableContentDate != null && downloadableContent.Id != null)
                 {
                     Dictionary<string, object> args = new Dictionary<string, object> {
                         {"pTitle",downloadableContent.Title},
-                        {"pDescription",downloadableContent.Description},
                         {"pURLPhotos",downloadableContent.URL},
                         {"pDownloadableContentDate",downloadableContent.DownloadableContentDate},
                         {"pId",downloadableContent.Id},
