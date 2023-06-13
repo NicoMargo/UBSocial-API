@@ -10,7 +10,6 @@ namespace UbSocial.Controllers
     public class UserController : Controller
     {
 
-
         [HttpPost]
         [Route("userLogin")]
         //await
@@ -52,7 +51,11 @@ namespace UbSocial.Controllers
             }
             catch
             {
+<<<<<<< HEAD
                 return StatusCode(500, "Error al obtener la informacion de los usuarios");
+=======
+                return StatusCode(500, "Error al obtener la informacion delos usuarios");
+>>>>>>> wais
             }
         }
 
@@ -76,6 +79,7 @@ namespace UbSocial.Controllers
         public IActionResult Create(User user)
         {
             string success = "";
+
             try
             {
                 if (user.Password != null && user.Email != null && user.Name != null && user.Surname != null && user.Admin != null)
@@ -84,9 +88,14 @@ namespace UbSocial.Controllers
                     {"pEmail",user.Email},
                     {"pPassword",user.Password},
                     {"pName",user.Name},
+<<<<<<< HEAD
                     {"pSurname",user.Surname},
                     {"pAdmin",user.Admin}
             };
+=======
+                    {"pSurname",user.Surname}
+                    };
+>>>>>>> wais
 
                     success = DBHelper.CallNonQuery("spUserCreate", args);
 
@@ -139,6 +148,7 @@ namespace UbSocial.Controllers
 
         }
 
+<<<<<<< HEAD
         [HttpPut]
         public IActionResult Update(User user)
         {
@@ -174,6 +184,8 @@ namespace UbSocial.Controllers
             }
             return StatusCode(500, success);
         }
+=======
+>>>>>>> wais
 
     }
 

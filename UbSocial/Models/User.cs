@@ -18,6 +18,11 @@ namespace UbSocial.Models
         public string? Name { get => _name; set => _name = value; }
         public string? Surname { get => _surname; set => _surname = value; }
         public int? Id { get => _id; set => _id = value; }
+<<<<<<< HEAD
         public bool? Admin { get => _admin; set => _admin = value; }
+=======
+
+        
+>>>>>>> wais
     }
 }
