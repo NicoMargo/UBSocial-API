@@ -8,6 +8,7 @@ namespace UbSocial.Models
         private int? _cantidadDeDescargas;
         private string? _URL;
         private int? _idSubject;
+        private int? _idUser;
         private DateTime? _downloadableContentDate;
         private int? _id;
         private IFormFile? _file;
@@ -23,6 +24,6 @@ namespace UbSocial.Models
         public string? URL { get => _URL; set => _URL = value; }
         public IFormFile? File { get => _file; set => _file = value; }
         public int? IdSubject { get => _idSubject; set => _idSubject = value; }
-
+        public int? IdUser { get => _idUser; set => _idUser = value; }
     }
 }

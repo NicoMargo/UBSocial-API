@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Reflection;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using UbSocial.Models;
 using UbSocial.Models.Helpers;
 
@@ -106,10 +108,10 @@ namespace UBSocial.Controllers
                     }
 
                     Dictionary<string, object> args = new Dictionary<string, object> {
-                         {"pTitle",downloadableContent.Title},
-                         {"pURLPhotos",downloadableContent.URL},
-                         {"pDownloadableContentDate",downloadableContent.DownloadableContentDate},
+                         {"pTitle",downloadableContent.File.FileName},
+                         {"pURL","/Content/" + downloadableContent.File.FileName},
                          {"pIdSubject",downloadableContent.IdSubject},
+                         {"pIdUser",downloadableContent.IdUser}
                     };
                     success = DBHelper.CallNonQuery("spDownloadableContentCreate", args);
                     if (success == "1")
@@ -129,44 +131,34 @@ namespace UBSocial.Controllers
         }
 
 
-
-        [HttpPut]
-        public IActionResult Update(DownloadableContent downloadableContent)
+        [HttpGet]
+        [Route("download")]
+        public IActionResult Download(string URL)
         {
-            string success = "Error al modificar el contenido";
-            try
+            // Combina la ruta de la carpeta wwwroot con el nombre del archivo para obtener la ruta completa del archivo.
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "WWWRoot", URL);
+
+            // Verifica si el archivo existe
+            if (!System.IO.File.Exists(filePath))
             {
-                if (downloadableContent.Title != null && downloadableContent.URL != null && downloadableContent.DownloadableContentDate != null && downloadableContent.Id != null)
-                {
-                    Dictionary<string, object> args = new Dictionary<string, object> {
-                        {"pTitle",downloadableContent.Title},
-                        {"pURLPhotos",downloadableContent.URL},
-                        {"pDownloadableContentDate",downloadableContent.DownloadableContentDate},
-                        {"pId",downloadableContent.Id},
-
-
-                    };
-
-                    success = DBHelper.CallNonQuery("spDownloadableContentUpdate", args);
-
-                    if (success == "1")
-                    {
-                        return Ok();
-                    }
-                    else
-                    {
-                        return StatusCode(500, success);
-                    }
-                }
-                else
-                {
-                    success = "Error al intentar actualizar los datos. Revise nuevemente lo introducido.";
-                }
+                return NotFound();
             }
-            catch
+
+            // Obtiene el tipo MIME del archivo (importante para saber cómo el navegador debe manejar la descarga)
+            var mimeType = GetMimeType(filePath);
+
+            // Retorna el archivo para descarga
+            return PhysicalFile(filePath, mimeType, URL);
+        }
+
+        private string GetMimeType(string filePath)
+        {
+            var provider = new FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(filePath, out var mimeType))
             {
+                mimeType = "application/octet-stream"; // Tipo MIME por defecto si no se puede determinar
             }
-            return StatusCode(500, success);
+            return mimeType;
         }
 
     }
