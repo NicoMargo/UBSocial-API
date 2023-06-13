@@ -42,6 +42,35 @@ namespace UbSocial.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult UserGet()
+        {
+            try
+            {
+                return Ok(DBHelper.callProcedureReader("spUserGetAll", new Dictionary<string, object> { }));
+            }
+            catch
+            {
+                return StatusCode(500, "Error al obtener la informacion delos usuarios");
+            }
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult UserGetById(int id)
+        {
+            try
+            {
+                Dictionary<string, object> args = new Dictionary<string, object> {
+                    {"pId",id}
+                };
+                return Ok(DBHelper.callProcedureReader("spUserGetById", args));
+            }
+            catch
+            {
+                return StatusCode(500, "Error al obtener la informacion del usuario");
+            }
+        }
+
         [HttpPost]
         public IActionResult Create(User user)
         {
@@ -108,5 +137,7 @@ namespace UbSocial.Controllers
             }
 
         }
+
+
     }
 }
