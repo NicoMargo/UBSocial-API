@@ -6,9 +6,11 @@ namespace UbSocial.Models
     {
         private string? _title;
         private int? _cantidadDeDescargas;
-        private String? _URL;
+        private string? _URL;
+        private int? _idSubject;
         private DateTime? _downloadableContentDate;
         private int? _id;
+        private IFormFile? _file;
 
         public DownloadableContent()
         {
@@ -18,21 +20,9 @@ namespace UbSocial.Models
         public int? Id { get => _id; set => _id = value; }
         public int? CantidadDeDescargas { get => _cantidadDeDescargas; set => _cantidadDeDescargas = value; }
         public DateTime? DownloadableContentDate { get => _downloadableContentDate; set => _downloadableContentDate = value; }
-        public String? URL { get => _URL; set => _URL = value; }
+        public string? URL { get => _URL; set => _URL = value; }
+        public IFormFile? File { get => _file; set => _file = value; }
+        public int? IdSubject { get => _idSubject; set => _idSubject = value; }
 
-        public string Create(DownloadableContent downloadableContent)
-        {
-
-            Dictionary<string, object> args = new Dictionary<string, object> {
-                    {"pTitle",downloadableContent._title},
-                    {"pURLPhotos",downloadableContent._URL},
-                    {"pDownloadableContentDate",downloadableContent._downloadableContentDate},
-                    {"pId",downloadableContent._id},
-                    {"pCantidadDeDescargas",downloadableContent._cantidadDeDescargas},
-            };
-
-            return (DBHelper.CallNonQuery("spDownloadableContentCreate", args));
-
-        }
     }
 }

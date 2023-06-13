@@ -18,18 +18,6 @@ namespace UbSocial.Models
         public string? Surname { get => _surname; set => _surname = value; }
         public int? Id { get => _id; set => _id = value; }
 
-        public string Create (User user)
-        {            
-            
-            Dictionary<string, object> args = new Dictionary<string, object> {
-                    {"pEmail",user.Email},
-                    {"pPassword",user.Password},
-                    {"pName",user.Name},
-                    {"pSurname",user.Surname}
-            };
-
-            return (DBHelper.CallNonQuery("spUserCreate", args));           
-            
-        }
+        
     }
 }

@@ -22,20 +22,5 @@ namespace UbSocial.Models
         public DateTime? ActivityDate { get => _activityDate; set => _activityDate = value; }
         public List<string>? URLPhotos { get => _URLPhotos; set => _URLPhotos = value; }
 
-        public string Create(Activity activity)
-        {
-
-            Dictionary<string, object> args = new Dictionary<string, object> {
-                    {"pTitle",activity._title},
-                    {"pDescription",activity._description},
-                    {"pContact",activity._contact},
-                    {"pURLPhotos",activity._URLPhotos},
-                    {"pActivityDate",activity._activityDate},
-                    {"pId",activity._id},
-            };
-
-            return (DBHelper.CallNonQuery("spActivityCreate", args));
-
-        }
     }
 }

@@ -75,17 +75,41 @@ namespace UBSocial.Controllers
         [HttpPost]
         [Authorize]
 
-        public IActionResult Create(DownloadableContent downloadableContent)
+        public IActionResult Create([FromForm] DownloadableContent downloadableContent)
         {
+   
+            
+
             string success = "Error al crear el contenido";
             try
             {
-                if (downloadableContent.Title != null && downloadableContent.URL != null && downloadableContent.DownloadableContentDate != null)
+                if (downloadableContent.File.FileName != null)
                 {
+                    
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "WWWRoot", "Content", downloadableContent.File.FileName);
+
+                    var originalFilePath = filePath;
+                    var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(originalFilePath);
+                    var extension = Path.GetExtension(originalFilePath);
+                    var counter = 1;
+
+                    while (System.IO.File.Exists(filePath))
+                    {
+                        var newFileName = $"{fileNameWithoutExtension}({counter}){extension}";
+                        filePath = Path.Combine("WWWRoot", "Content", newFileName);
+                        counter++;
+                    }
+
+                    using (var stream = System.IO.File.Create(filePath))
+                    {
+                        downloadableContent.File.CopyToAsync(stream);
+                    }
+
                     Dictionary<string, object> args = new Dictionary<string, object> {
                          {"pTitle",downloadableContent.Title},
                          {"pURLPhotos",downloadableContent.URL},
                          {"pDownloadableContentDate",downloadableContent.DownloadableContentDate},
+                         {"pIdSubject",downloadableContent.IdSubject},
                     };
                     success = DBHelper.CallNonQuery("spDownloadableContentCreate", args);
                     if (success == "1")
@@ -103,6 +127,8 @@ namespace UBSocial.Controllers
             }
             return StatusCode(500, success);
         }
+
+
 
         [HttpPut]
         public IActionResult Update(DownloadableContent downloadableContent)

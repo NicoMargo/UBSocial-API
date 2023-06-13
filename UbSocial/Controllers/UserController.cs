@@ -10,7 +10,6 @@ namespace UbSocial.Controllers
     public class UserController : Controller
     {
 
-
         [HttpPost]
         [Route("userLogin")]
         //await
@@ -47,11 +46,20 @@ namespace UbSocial.Controllers
         public IActionResult Create(User user)
         {
             string success = "";
+
             try
             {
                 if (user.Password != null && user.Email != null && user.Name != null && user.Surname != null)
                 {
-                    success = user.Create(user);
+                    Dictionary<string, object> args = new Dictionary<string, object> {
+                    {"pEmail",user.Email},
+                    {"pPassword",user.Password},
+                    {"pName",user.Name},
+                    {"pSurname",user.Surname}
+                    };
+
+                    success = DBHelper.CallNonQuery("spUserCreate", args);
+
                     if (success == "1")
                     {
                         return Ok();
