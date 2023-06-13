@@ -79,15 +79,11 @@ namespace UBSocial.Controllers
 
         public IActionResult Create([FromForm] DownloadableContent downloadableContent)
         {
-   
-            
-
             string success = "Error al crear el contenido";
             try
             {
                 if (downloadableContent.File.FileName != null)
                 {
-                    
                     var filePath = Path.Combine(Directory.GetCurrentDirectory(), "WWWRoot", "Content", downloadableContent.File.FileName);
 
                     var originalFilePath = filePath;
@@ -113,11 +109,14 @@ namespace UBSocial.Controllers
                          {"pIdSubject",downloadableContent.IdSubject},
                          {"pIdUser",downloadableContent.IdUser}
                     };
+
                     success = DBHelper.CallNonQuery("spDownloadableContentCreate", args);
+
                     if (success == "1")
                     {
                         return Ok();
                     }
+
                     else
                     {
                         return StatusCode(500, success);
