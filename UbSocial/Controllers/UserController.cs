@@ -36,9 +36,9 @@ namespace UbSocial.Controllers
                 }
                 return NotFound("Usuario no encontrado");
             }
-            catch
+            catch (Exception ex) 
             {
-                return NotFound("Usuario no encontrado");
+                return NotFound(ex.Message);
             }
         }
 
@@ -78,7 +78,7 @@ namespace UbSocial.Controllers
 
             try
             {
-                if (user.Password != null && user.Email != null && user.Name != null && user.Surname != null && user.Admin != null)
+                if (user.Password != null && user.Email != null && user.Name != null && user.Surname != null)
                 {
                     Dictionary<string, object> args = new Dictionary<string, object> {
                     {"pEmail",user.Email},
