@@ -112,7 +112,7 @@ namespace UBSocial.Controllers
 
                     success = DBHelper.CallNonQuery("spDownloadableContentCreate", args);
 
-                    if (success == "1")
+                    if (success == "3")
                     {
                         return Ok();
                     }
@@ -132,7 +132,7 @@ namespace UBSocial.Controllers
 
         [HttpGet]
         [Authorize]
-        [Route("download")]
+        [Route("download/{URL}/{id}")]
         public IActionResult Download(string URL, int id)
         {
             string success = "Error al crear el contenido";
@@ -143,12 +143,12 @@ namespace UBSocial.Controllers
                     {"pId",id}
                 };
 
-                success = DBHelper.CallNonQuery("spCanDownloadableContent", args);
+                success = DBHelper.callProcedureReader("spCanDownloadableContent", args);
 
-                if (success == "1")
+                if (success == "True")
                 {
                     // Combina la ruta de la carpeta wwwroot con el nombre del archivo para obtener la ruta completa del archivo.
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "WWWRoot", URL);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "WWWRoot/Content", URL);
 
                     // Verifica si el archivo existe
                     if (!System.IO.File.Exists(filePath))
