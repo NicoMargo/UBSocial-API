@@ -9,6 +9,7 @@ namespace UbSocial.Models
         private string? _contact;
         private List<String>? _URLPhotos;
         private DateTime? _activityDate;
+        private DateTime? _activityDateFinished;
         private int? _id;
 
         public Activity()
@@ -21,6 +22,6 @@ namespace UbSocial.Models
         public string? Contact { get => _contact; set => _contact = value; }
         public DateTime? ActivityDate { get => _activityDate; set => _activityDate = value; }
         public List<string>? URLPhotos { get => _URLPhotos; set => _URLPhotos = value; }
-
+        public DateTime? ActivityDateFinished { get => _activityDateFinished; set => _activityDateFinished = value; }
     }
 }

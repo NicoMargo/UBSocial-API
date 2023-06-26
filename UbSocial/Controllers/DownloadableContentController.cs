@@ -131,25 +131,52 @@ namespace UBSocial.Controllers
 
 
         [HttpGet]
+        [Authorize]
         [Route("download")]
-        public IActionResult Download(string URL)
+        public IActionResult Download(string URL, int id)
         {
-            // Combina la ruta de la carpeta wwwroot con el nombre del archivo para obtener la ruta completa del archivo.
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "WWWRoot", URL);
+            string success = "Error al crear el contenido";
 
-            // Verifica si el archivo existe
-            if (!System.IO.File.Exists(filePath))
+            try
             {
-                return NotFound();
+                Dictionary<string, object> args = new Dictionary<string, object> {
+                    {"pId",id}
+                };
+
+                success = DBHelper.CallNonQuery("spCanDownloadableContent", args);
+
+                if (success == "1")
+                {
+                    // Combina la ruta de la carpeta wwwroot con el nombre del archivo para obtener la ruta completa del archivo.
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "WWWRoot", URL);
+
+                    // Verifica si el archivo existe
+                    if (!System.IO.File.Exists(filePath))
+                    {
+                        return NotFound();
+                    }
+
+                    // Obtiene el tipo MIME del archivo (importante para saber cómo el navegador debe manejar la descarga)
+                    var mimeType = GetMimeType(filePath);
+
+                    // Retorna el archivo para descarga
+                    return PhysicalFile(filePath, mimeType, URL);
+
+                }
+
+                else
+                {
+                    success = "Debe subir un archivo para poder descargar el contenido.";
+                    return StatusCode(500, success);
+                }
+
+            }
+            catch
+            {
+                return StatusCode(500, success);
             }
 
-            // Obtiene el tipo MIME del archivo (importante para saber cómo el navegador debe manejar la descarga)
-            var mimeType = GetMimeType(filePath);
-
-            // Retorna el archivo para descarga
-            return PhysicalFile(filePath, mimeType, URL);
         }
-
         private string GetMimeType(string filePath)
         {
             var provider = new FileExtensionContentTypeProvider();

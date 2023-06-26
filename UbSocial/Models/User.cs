@@ -9,6 +9,9 @@ namespace UbSocial.Models
         private string? _name;
         private string? _surname;
         private int? _id;
+        private int? _numDownloadable;
+        private bool? _canDownloable;
+        private int? _countFilesUploaded;  
 
         public User() {
         }
@@ -17,5 +20,8 @@ namespace UbSocial.Models
         public string? Name { get => _name; set => _name = value; }
         public string? Surname { get => _surname; set => _surname = value; }
         public int? Id { get => _id; set => _id = value; }
+        public int? NumDownloadable { get => _numDownloadable; set => _numDownloadable = value; }
+        public bool? CanDownloable { get => _canDownloable; set => _canDownloable = value; }
+        public int? CountFilesUploaded { get => _countFilesUploaded; set => _countFilesUploaded = value; }
     }
 }
