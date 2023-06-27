@@ -75,74 +75,124 @@ namespace UBSocial.Controllers
         [HttpPost]
         [Authorize]
 
-        public IActionResult Create(Activity activity)
+        public IActionResult Create([FromForm] Activity activity)
         {
             string success = "Error al crear la actividad";
             try
             {
-                if (activity.Title != null && activity.Description != null && activity.Id != null && activity.Contact != null && activity.URLPhotos != null)
+                if (activity.File.FileName != null)
                 {
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "WWWRoot", "ActivityPhotos", activity.File.FileName);
+
+                    var originalFilePath = filePath;
+                    var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(originalFilePath);
+                    var extension = Path.GetExtension(originalFilePath);
+                    var counter = 1;
+
+                    while (System.IO.File.Exists(filePath))
+                    {
+                        var newFileName = $"{fileNameWithoutExtension}({counter}){extension}";
+                        filePath = Path.Combine("WWWRoot", "ActivityPhotos", newFileName);
+                        counter++;
+                    }
+
+                    using (var stream = System.IO.File.Create(filePath))
+                    {
+                        activity.File.CopyToAsync(stream);
+                    }
+
                     Dictionary<string, object> args = new Dictionary<string, object> {
                          {"pTitle",activity.Title},
                          {"pDescription",activity.Description},
                          {"pContact",activity.Contact},
-                         {"pURLPhotos",activity.URLPhotos},
-                         {"pActivityDate",activity.ActivityDate},
+                         // {"pActivityDate",activity.ActivityDate},
+                         // {"pActivityDateFinished",activity.ActivityDateFinished},
+                         {"pURL","/ActivityPhotos/" + activity.File.FileName},
+                         {"pIdSubject",activity.IdActivity},
+                         {"pIdUser",activity.IdUser}
                     };
+
                     success = DBHelper.CallNonQuery("spActivityCreate", args);
+
                     if (success == "1")
                     {
                         return Ok();
                     }
+
                     else
                     {
                         return StatusCode(500, success);
                     }
                 }
+
+                return StatusCode(500, success);
             }
             catch
             {
+                return StatusCode(500, success);
             }
-            return StatusCode(500, success);
+            
         }
 
         [HttpPut]
-        public IActionResult Update(Activity activity)
+        [Authorize]
+        public IActionResult Update([FromForm] Activity activity)
         {
             string success = "Error al modificar la actividad";
             try
             {
-                if (activity.Title != null && activity.Description != null && activity.Id != null && activity.Contact != null && activity.ActivityDate != null && activity.URLPhotos != null) 
+                if (activity.File.FileName != null && activity.Title != null && activity.Description != null && activity.Id != null && activity.Contact != null && activity.ActivityDate != null && activity.URLPhotos != null && activity.IdUser != null)
                 {
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "WWWRoot", "ActivityPhotos", activity.File.FileName);
+
+                    var originalFilePath = filePath;
+                    var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(originalFilePath);
+                    var extension = Path.GetExtension(originalFilePath);
+                    var counter = 1;
+
+                    while (System.IO.File.Exists(filePath))
+                    {
+                        var newFileName = $"{fileNameWithoutExtension}({counter}){extension}";
+                        filePath = Path.Combine("WWWRoot", "ActivityPhotos", newFileName);
+                        counter++;
+                    }
+
+                    using (var stream = System.IO.File.Create(filePath))
+                    {
+                        activity.File.CopyToAsync(stream);
+                    }
+
                     Dictionary<string, object> args = new Dictionary<string, object> {
                          {"pTitle",activity.Title},
                          {"pDescription",activity.Description},
-                         {"pId", activity.Id},
                          {"pContact",activity.Contact},
-                         {"pURLPhotos",activity.URLPhotos},
-                         {"pActivityDate",activity.ActivityDate},
+                         // {"pActivityDate",activity.ActivityDate},
+                         // {"pActivityDateFinished",activity.ActivityDateFinished},
+                         {"pURL","/ActivityPhotos/" + activity.File.FileName},
+                         {"pIdSubject",activity.IdActivity},
+                         {"pIdUser",activity.IdUser}
                     };
 
                     success = DBHelper.CallNonQuery("spActivityUpdate", args);
-                    
-                    if (success == "1")
+
+                    if (success == "4")
                     {
                         return Ok();
                     }
+
                     else
                     {
                         return StatusCode(500, success);
                     }
                 }
-                else
-                {
-                    success = "Error al intentar actualizar los datos. Revise nuevemente lo introducido.";
-                }
+
+                return StatusCode(500, success);
             }
             catch
             {
+                return StatusCode(500, success);
             }
-            return StatusCode(500, success);
+            
         }
 
     }

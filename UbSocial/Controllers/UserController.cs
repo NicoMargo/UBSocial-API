@@ -85,7 +85,7 @@ namespace UbSocial.Controllers
                     {"pPassword",user.Password},
                     {"pName",user.Name},
                     {"pSurname",user.Surname},
-                    {"pAdmin",false}
+                    {"pAdmin",user.Admin}
                     };
 
 
@@ -97,6 +97,7 @@ namespace UbSocial.Controllers
                     }
                     else
                     {
+                        success = "El email proporcionado ya existe en otro usuario.";
                         return StatusCode(500, success);
                     }
                 }
