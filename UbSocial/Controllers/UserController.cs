@@ -10,9 +10,12 @@ namespace UbSocial.Controllers
     public class UserController : Controller
     {
 
+        // LOGIN
+        // Ejemplo: (GET) localhost:5665/User/1
+
         [HttpPost]
         [Route("userLogin")]
-        //await
+        
         public async Task<IActionResult> Login(User user)
         {
             string token;
@@ -42,6 +45,9 @@ namespace UbSocial.Controllers
             }
         }
 
+        // GET ALL
+        // Ejemplo: (GET) localhost:5665/User/1
+
         [HttpGet]
         public IActionResult UserGet()
         {
@@ -54,6 +60,9 @@ namespace UbSocial.Controllers
                 return StatusCode(500, "Error al obtener la informacion de los usuarios");
             }
         }
+
+        // GET BY ID
+        // Ejemplo: (GET) localhost:5665/User/1
 
         [HttpGet("{id}")]
         public IActionResult UserGetById(int id)
@@ -70,6 +79,9 @@ namespace UbSocial.Controllers
                 return StatusCode(500, "Error al obtener la informacion del usuario");
             }
         }
+
+        // CREATE
+        // Ejemplo: (POST) localhost:5665/User
 
         [HttpPost]
         public IActionResult Create(User user)
@@ -112,8 +124,10 @@ namespace UbSocial.Controllers
             }
         }
 
-            //localhost:5665/User/1
-            [HttpDelete("{id}")]
+        // DELETE BY ID
+        // Ejemplo: (DELETE) localhost:5665/User/1
+
+        [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             string success = "";
@@ -141,6 +155,8 @@ namespace UbSocial.Controllers
 
         }
 
+        // UPDATE
+        // Ejemplo: (PUT) localhost:5665/User
 
         [HttpPut]
         public IActionResult Update(User user)

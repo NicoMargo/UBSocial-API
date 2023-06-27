@@ -10,6 +10,9 @@ namespace UBSocial.Controllers
     [ApiController]
     public class ActivityController : ControllerBase
     {
+        // GET ALL
+        // Ejemplo: (GET) localhost:5665/activity
+
         [HttpGet]
         public IActionResult ActivityGet()
         {
@@ -22,6 +25,9 @@ namespace UBSocial.Controllers
                 return StatusCode(500, "Error al obtener la informacion de las actividades");
             }
         }
+
+        // GET BY ID
+        // Ejemplo: (GET) localhost:5665/activity/1
 
         [HttpGet("{id}")]
         public IActionResult ActivityGetById(int id)
@@ -38,6 +44,28 @@ namespace UBSocial.Controllers
                 return StatusCode(500, "Error al obtener la informacion de las actividades");
             }
         }
+
+        // GET BY TITLE
+        // Ejemplo: (GET) localhost:5665/activity/valorant
+
+        [HttpGet("{title}")]
+        public IActionResult ActivityGetByTitle(string title)
+        {
+            try
+            {
+                Dictionary<string, object> args = new Dictionary<string, object> {
+                    {"pTitle",title}
+                };
+                return Ok(DBHelper.callProcedureReader("spActivityGetByTitle", args));
+            }
+            catch
+            {
+                return StatusCode(500, "Error al obtener la informacion de las actividades");
+            }
+        }
+
+        // DELETE BY ID
+        // Ejemplo: (DELETE) localhost:5665/activity/1
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
@@ -71,6 +99,9 @@ namespace UBSocial.Controllers
                 return StatusCode(500, success);
             }
         }
+
+        // CREATE
+        // Ejemplo: (POST) localhost:5665/activity
 
         [HttpPost]
         [Authorize]
@@ -134,6 +165,9 @@ namespace UBSocial.Controllers
             
         }
 
+        // UPDATE
+        // Ejemplo: (PUT) localhost:5665/activity
+
         [HttpPut]
         [Authorize]
         public IActionResult Update([FromForm] Activity activity)
@@ -193,6 +227,42 @@ namespace UBSocial.Controllers
                 return StatusCode(500, success);
             }
             
+        }
+
+        // ACTIVITY MEMBERS
+        // Ejemplo: (POST) localhost:5665/activity
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult ActivityMember(Activity activity)
+        {
+            string success = "Error al modificar la actividad";
+            try
+            {
+                Dictionary<string, object> args = new Dictionary<string, object> {
+                         {"pIdSubject",activity.IdActivity},
+                         {"pIdUser",activity.IdUser}
+                };
+
+                success = DBHelper.CallNonQuery("spActivityMembers", args);
+
+                if (success == "1")
+                {
+                    return Ok();
+                }
+
+                else
+                {
+                    return StatusCode(500, success);
+                }
+
+            }
+            catch
+            {
+                return StatusCode(500, success);
+            }
+            
+
         }
 
     }

@@ -10,6 +10,9 @@ namespace UBSocial.Controllers
     [ApiController]
     public class ProposalController : ControllerBase
     {
+        // GET ALL
+        // Ejemplo: (GET) localhost:5665/proposal
+
         [HttpGet]
         public IActionResult ProposalGet()
         {
@@ -22,6 +25,9 @@ namespace UBSocial.Controllers
                 return StatusCode(500, "Error al obtener la informacion de las propuestas");
             }
         }
+
+        // GET BY ID
+        // Ejemplo: (GET) localhost:5665/proposal/1
 
         [HttpGet("{id}")]
         public IActionResult ProposalGetById(int id)
@@ -38,6 +44,9 @@ namespace UBSocial.Controllers
                 return StatusCode(500, "Error al obtener la informacion de las propuestas");
             }
         }
+
+        // DELETE BY ID
+        // Ejemplo: (DELETE) localhost:5665/proposal/1
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
@@ -72,6 +81,9 @@ namespace UBSocial.Controllers
             }
         }
 
+        // CREATE
+        // Ejemplo: (POST) localhost:5665/proposal
+
         [HttpPost]
         [Authorize]
 
@@ -102,6 +114,9 @@ namespace UBSocial.Controllers
             }
             return StatusCode(500, success);
         }
+
+        // UPDATE
+        // Ejemplo: (PUT) localhost:5665/proposal
 
         [HttpPut]
         public IActionResult Update(Proposal proposal)

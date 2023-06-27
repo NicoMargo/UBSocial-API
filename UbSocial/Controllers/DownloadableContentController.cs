@@ -12,6 +12,10 @@ namespace UBSocial.Controllers
     [ApiController]
     public class DownloadableContentController : ControllerBase
     {
+
+        // GET ALL
+        // Ejemplo: (PUT) localhost:5665/downloadableContent
+
         [HttpGet]
         public IActionResult DownloadableContentGet()
         {
@@ -24,6 +28,9 @@ namespace UBSocial.Controllers
                 return StatusCode(500, "Error al obtener la informacion del contenido");
             }
         }
+
+        // GET BY ID
+        // Ejemplo: (GET) localhost:5665/downloadableContent/1
 
         [HttpGet("{id}")]
         public IActionResult DownloadableContentGetById(int id)
@@ -40,6 +47,29 @@ namespace UBSocial.Controllers
                 return StatusCode(500, "Error al obtener la informacion del contenido");
             }
         }
+
+        // GET BY SUBJECT
+        // Ejemplo: (GET) localhost:5665/downloadableContent/1
+
+        [HttpGet]
+        [Route("subject/{id}")]
+        public IActionResult DownloadableContentGetBySubject(int id)
+        {
+            try
+            {
+                Dictionary<string, object> args = new Dictionary<string, object> {
+                    {"pId",id}
+                };
+                return Ok(DBHelper.callProcedureReader("spDownloadableContentGetBySubject", args));
+            }
+            catch
+            {
+                return StatusCode(500, "Error al obtener la informacion del contenido");
+            }
+        }
+
+        // DELETE BY ID
+        // Ejemplo: (DELETE) localhost:5665/downloadableContent/1
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
@@ -73,6 +103,9 @@ namespace UBSocial.Controllers
                 return StatusCode(500, success);
             }
         }
+
+        // CREATE
+        // Ejemplo: (POST) localhost:5665/downloadableContent
 
         [HttpPost]
         [Authorize]
@@ -129,6 +162,8 @@ namespace UBSocial.Controllers
             return StatusCode(500, success);
         }
 
+        // DOWNLOAD
+        // Ejemplo: (GET) localhost:5665/downloadableContent/download/pato.gif/1
 
         [HttpGet]
         [Authorize]
