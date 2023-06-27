@@ -84,7 +84,8 @@ namespace UbSocial.Controllers
                     {"pEmail",user.Email},
                     {"pPassword",user.Password},
                     {"pName",user.Name},
-                    {"pSurname",user.Surname}
+                    {"pSurname",user.Surname},
+                    {"pAdmin",false}
                     };
 
 
@@ -101,12 +102,12 @@ namespace UbSocial.Controllers
                 }
                 else
                 {
-                    return BadRequest();
+                    return BadRequest("El email, nombre, apellido y contraseña no pueden ser nulos" + user.Password + user.Name + user.Surname + user.Name + " " + user);
                 }
             }
-            catch
+            catch (Exception e)
             {
-                return StatusCode(500, success);
+                return StatusCode(500, e.Message);
             }
         }
 
