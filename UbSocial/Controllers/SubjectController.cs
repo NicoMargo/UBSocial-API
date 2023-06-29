@@ -10,6 +10,9 @@ namespace UBSocial.Controllers
     [ApiController]
     public class SubjectController : ControllerBase
     {
+        // GET ALL
+        // Ejemplo: (GET) localhost:5665/Subject
+
         [HttpGet]
         public IActionResult SubjectGet()
         {
@@ -22,6 +25,9 @@ namespace UBSocial.Controllers
                 return StatusCode(500, "Error al obtener la informacion de las materias");
             }
         }
+
+        // GET ALL
+        // Ejemplo: (GET) localhost:5665/Subject/1
 
         [HttpGet("{id}")]
         public IActionResult SubjectGetById(int id)

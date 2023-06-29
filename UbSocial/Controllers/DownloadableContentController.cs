@@ -51,6 +51,28 @@ namespace UBSocial.Controllers
             }
         }
 
+        // GET BY TOKEN
+        // Ejemplo: (GET) localhost:5665/downloadableContent/current
+
+        [HttpGet("current")]
+        [Authorize]
+        public IActionResult DownloadableContentGetByToken()
+        {
+            int? userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            try
+            {
+                Dictionary<string, object> args = new Dictionary<string, object> {
+                    {"pId",userId}
+                };
+                return Ok(DBHelper.callProcedureReader("spDownloadableContentGetById", args));
+            }
+            catch
+            {
+                return StatusCode(500, "Error al obtener la informacion del contenido");
+            }
+        }
+
         // GET BY SUBJECT
         // Ejemplo: (GET) localhost:5665/downloadableContent/1
 

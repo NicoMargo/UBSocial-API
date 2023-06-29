@@ -12,7 +12,7 @@ namespace UBSocial.Controllers
     public class ActivityController : ControllerBase
     {
         // GET ALL
-        // Ejemplo: (GET) localhost:5665/activity/
+        // Ejemplo: (GET) localhost:5665/activity
 
         [HttpGet("{page}")]
         public IActionResult ActivityGet(int page = 0)
@@ -33,7 +33,7 @@ namespace UBSocial.Controllers
         // GET BY ID
         // Ejemplo: (GET) localhost:5665/activity/1
 
-        [HttpGet("ActivityId/{id}")]
+        [HttpGet("{id}")]
         public IActionResult ActivityGetById(int id)
         {
             try
@@ -49,10 +49,31 @@ namespace UBSocial.Controllers
             }
         }
 
-        // GET BY TITLE
-        // Ejemplo: (GET) localhost:5665/activity/valorant
+        // GET BY TOKEN
+        // Ejemplo: (GET) localhost:5665/activity/current
 
-        [HttpGet("{title}")]
+        [HttpGet("current")]
+        public IActionResult ActivityGetByToken()
+        {
+            int? userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            try
+            {
+                Dictionary<string, object> args = new Dictionary<string, object> {
+                    {"pId",userId}
+                };
+                return Ok(DBHelper.callProcedureReader("spActivityGetById", args));
+            }
+            catch
+            {
+                return StatusCode(500, "Error al obtener la informacion de las actividades");
+            }
+        }
+
+        // GET BY TITLE
+        // Ejemplo: (GET) localhost:5665/activity/currentTitle/valorant
+
+        [HttpGet("currentTitle/{title}")]
         public IActionResult ActivityGetByTitle(string title)
         {
             try
@@ -247,11 +268,11 @@ namespace UBSocial.Controllers
         [Authorize]
         public IActionResult ActivityMember(Activity activity)
         {
-            string success = "Error al modificar la actividad";
+            string success = "Error al mostrar los usuarios de la actividad";
             try
             {
                 Dictionary<string, object> args = new Dictionary<string, object> {
-                         {"pIdSubject",activity.IdActivity},
+                         {"pIdActivity",activity.IdActivity},
                          {"pIdUser",activity.IdUser}
                 };
 

@@ -34,14 +34,37 @@ namespace UBSocial.Controllers
         // GET BY ID
         // Ejemplo: (GET) localhost:5665/proposal/1
 
-        [HttpGet("n/{id}")]
+        [HttpGet("{id}")]
         [Authorize]
         public IActionResult ProposalGetById(int id)
         {
+            
             try
             {
                 Dictionary<string, object> args = new Dictionary<string, object> {
                     {"pId",id}
+                };
+                return Ok(DBHelper.callProcedureReader("spProposalGetById", args));
+            }
+            catch
+            {
+                return StatusCode(500, "Error al obtener la informacion de las propuestas");
+            }
+        }
+
+        // GET BY TOKEN
+        // Ejemplo: (GET) localhost:5665/proposal/current
+
+        [HttpGet("current")]
+        [Authorize]
+        public IActionResult ProposalGetByToken()
+        {
+            int? userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            try
+            {
+                Dictionary<string, object> args = new Dictionary<string, object> {
+                    {"pId",userId}
                 };
                 return Ok(DBHelper.callProcedureReader("spProposalGetById", args));
             }

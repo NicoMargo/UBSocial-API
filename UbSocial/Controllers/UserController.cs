@@ -15,7 +15,7 @@ namespace UbSocial.Controllers
     {
 
         // LOGIN
-        // Ejemplo: (GET) localhost:5665/User/1
+        // Ejemplo: (GET) localhost:5665/User/userLogin
 
         [HttpPost]
         [Route("userLogin")]
@@ -75,6 +75,27 @@ namespace UbSocial.Controllers
             {
                 Dictionary<string, object> args = new Dictionary<string, object> {
                     {"pId",id}
+                };
+                return Ok(DBHelper.callProcedureReader("spUserGetById", args));
+            }
+            catch
+            {
+                return StatusCode(500, "Error al obtener la informacion del usuario");
+            }
+        }
+
+        // GET BY TOKEN
+        // Ejemplo: (GET) localhost:5665/User/current
+
+        [HttpGet("current")]
+        public IActionResult UserGetByToken()
+        {
+            int? userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            try
+            {
+                Dictionary<string, object> args = new Dictionary<string, object> {
+                    {"pId",userId}
                 };
                 return Ok(DBHelper.callProcedureReader("spUserGetById", args));
             }
