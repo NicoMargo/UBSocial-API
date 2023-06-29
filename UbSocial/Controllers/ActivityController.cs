@@ -10,8 +10,8 @@ namespace UBSocial.Controllers
     [ApiController]
     public class ActivityController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult ActivityGet()
+        [HttpGet("{id}")]
+        public IActionResult ActivityGet(int page = 0)
         {
             try
             {
@@ -23,7 +23,7 @@ namespace UBSocial.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("ActivityId/{id}")]
         public IActionResult ActivityGetById(int id)
         {
             try

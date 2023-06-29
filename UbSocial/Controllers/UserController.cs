@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using System.Security.Claims;
+using System.Text.Json;
 using UbSocial.Models;
 using UbSocial.Models.Helpers;
 
@@ -24,9 +28,9 @@ namespace UbSocial.Controllers
                      {"pEmail",user.Email},
                      {"pPassword",user.Password},
                     };
-
-                    string success = DBHelper.callProcedureReader("spUserLogin", args);
-                    if (success == "true")
+                    string json = DBHelper.callProcedureReader("spUserLogin", args);
+                    user = JsonSerializer.Deserialize<User>(json);
+                    if (user.Id != null)
                     {
                         token = JWT.GenerateToken(user);
                         RefreshToken refreshToken = JWT.GenerateRefreshToken();
@@ -36,7 +40,7 @@ namespace UbSocial.Controllers
                 }
                 return NotFound("Usuario no encontrado");
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return NotFound(ex.Message);
             }
@@ -78,7 +82,7 @@ namespace UbSocial.Controllers
 
             try
             {
-                if (user.Password != null && user.Email != null && user.Name != null && user.Surname != null)
+                if (user.Password != null && user.Email != null && user.Name != null && user.Surname != null && user.Admin != null)
                 {
                     Dictionary<string, object> args = new Dictionary<string, object> {
                     {"pEmail",user.Email},
@@ -112,17 +116,19 @@ namespace UbSocial.Controllers
             }
         }
 
-            //localhost:5665/User/1
-            [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        [HttpDelete]
+        [Authorize]
+        public IActionResult Delete()
         {
+            int? userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
             string success = "";
             try
             {
-                if (id != null)
+                if (userId > 0)
                 {
                     Dictionary<string, object> args = new Dictionary<string, object> {
-                         {"pId",id}
+                         {"pId",userId}
                     };
 
                     success = DBHelper.CallNonQuery("spUserDelete", args);
@@ -143,6 +149,7 @@ namespace UbSocial.Controllers
 
 
         [HttpPut]
+        [Authorize]
         public IActionResult Update(User user)
         {
             string success = "Error al modificar el usuario";
