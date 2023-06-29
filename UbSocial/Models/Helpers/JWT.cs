@@ -16,7 +16,7 @@ namespace UbSocial.Models.Helpers
             //Create claims
             var claims = new[]
             {
-                new Claim(ClaimTypes.Sid, Convert.ToString(user.Id))
+                new Claim(ClaimTypes.NameIdentifier, Convert.ToString(user.Id))
             };
 
             //Create token

@@ -15,6 +15,8 @@ namespace UBSocial.Controllers
 
         [HttpGet]
         public IActionResult ActivityGet()
+        [HttpGet("{id}")]
+        public IActionResult ActivityGet(int page = 0)
         {
             try
             {
@@ -30,6 +32,7 @@ namespace UBSocial.Controllers
         // Ejemplo: (GET) localhost:5665/activity/1
 
         [HttpGet("{id}")]
+        [HttpGet("ActivityId/{id}")]
         public IActionResult ActivityGetById(int id)
         {
             try
