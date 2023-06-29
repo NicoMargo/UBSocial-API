@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -79,15 +80,16 @@ namespace UBSocial.Controllers
         public IActionResult Delete(int id)
         {
             string success = "Error al eliminar el contenido";
+            int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
             try
             {
                 if (id >= 0)
                 {
 
                     Dictionary<string, object> args = new Dictionary<string, object> {
-
-                    {"pId",id}
-
+                        {"pId",id},
+                        {"pIdUser",idUser}
                     };
 
                     success = DBHelper.CallNonQuery("spDownloadableContentDelete", args);
@@ -117,6 +119,8 @@ namespace UBSocial.Controllers
         public IActionResult Create([FromForm] DownloadableContent downloadableContent)
         {
             string success = "Error al crear el contenido";
+            int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
             try
             {
                 if (downloadableContent.File.FileName != null)
@@ -144,7 +148,7 @@ namespace UBSocial.Controllers
                          {"pTitle",downloadableContent.File.FileName},
                          {"pURL","/Content/" + downloadableContent.File.FileName},
                          {"pIdSubject",downloadableContent.IdSubject},
-                         {"pIdUser",downloadableContent.IdUser}
+                         {"pIdUser",idUser}
                     };
 
                     success = DBHelper.CallNonQuery("spDownloadableContentCreate", args);

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UbSocial.Models;
@@ -11,16 +12,17 @@ namespace UBSocial.Controllers
     public class ActivityController : ControllerBase
     {
         // GET ALL
-        // Ejemplo: (GET) localhost:5665/activity
+        // Ejemplo: (GET) localhost:5665/activity/
 
-        [HttpGet]
-        public IActionResult ActivityGet()
-        [HttpGet("{id}")]
+        [HttpGet("{page}")]
         public IActionResult ActivityGet(int page = 0)
         {
             try
             {
-                return Ok(DBHelper.callProcedureReader("spActivityGetAll", new Dictionary<string, object> { }));
+                Dictionary<string, object> args = new Dictionary<string, object> {
+                    {"pPage",page}
+                };
+                return Ok(DBHelper.callProcedureReader("spActivityGetAll", args));
             }
             catch
             {
@@ -31,7 +33,6 @@ namespace UBSocial.Controllers
         // GET BY ID
         // Ejemplo: (GET) localhost:5665/activity/1
 
-        [HttpGet("{id}")]
         [HttpGet("ActivityId/{id}")]
         public IActionResult ActivityGetById(int id)
         {
@@ -75,6 +76,8 @@ namespace UBSocial.Controllers
         public IActionResult Delete(int id)
         {
             string success = "Error al eliminar la actividad";
+            int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
             try
             {
                 if (id >= 0)
@@ -82,7 +85,8 @@ namespace UBSocial.Controllers
 
                     Dictionary<string, object> args = new Dictionary<string, object> {
 
-                    {"pId",id}
+                        {"pId",id},
+                        {"pIdUser",idUser}
 
                     };
 
@@ -112,6 +116,8 @@ namespace UBSocial.Controllers
         public IActionResult Create([FromForm] Activity activity)
         {
             string success = "Error al crear la actividad";
+            int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
             try
             {
                 if (activity.File.FileName != null)
@@ -143,7 +149,7 @@ namespace UBSocial.Controllers
                          // {"pActivityDateFinished",activity.ActivityDateFinished},
                          {"pURL","/ActivityPhotos/" + activity.File.FileName},
                          {"pIdSubject",activity.IdActivity},
-                         {"pIdUser",activity.IdUser}
+                         {"pIdUser",idUser}
                     };
 
                     success = DBHelper.CallNonQuery("spActivityCreate", args);
@@ -176,6 +182,8 @@ namespace UBSocial.Controllers
         public IActionResult Update([FromForm] Activity activity)
         {
             string success = "Error al modificar la actividad";
+            int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
             try
             {
                 if (activity.File.FileName != null && activity.Title != null && activity.Description != null && activity.Id != null && activity.Contact != null && activity.ActivityDate != null && activity.URLPhotos != null && activity.IdUser != null)
@@ -207,7 +215,7 @@ namespace UBSocial.Controllers
                          // {"pActivityDateFinished",activity.ActivityDateFinished},
                          {"pURL","/ActivityPhotos/" + activity.File.FileName},
                          {"pIdSubject",activity.IdActivity},
-                         {"pIdUser",activity.IdUser}
+                         {"pIdUser",idUser}
                     };
 
                     success = DBHelper.CallNonQuery("spActivityUpdate", args);

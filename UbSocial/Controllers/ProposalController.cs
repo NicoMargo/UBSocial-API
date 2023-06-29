@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UbSocial.Models;
@@ -13,13 +14,16 @@ namespace UBSocial.Controllers
         // GET ALL
         // Ejemplo: (GET) localhost:5665/proposal
 
-        [HttpGet]
+        [HttpGet("{page}")]
         [Authorize]
-        public IActionResult ProposalGet()
+        public IActionResult ProposalGet(int page = 0)
         {
             try
             {
-                return Ok(DBHelper.callProcedureReader("spProposalGetAll", new Dictionary<string, object> { }));
+                Dictionary<string, object> args = new Dictionary<string, object> {
+                    {"pPage",page}
+                };
+                return Ok(DBHelper.callProcedureReader("spProposalGetAll", args));
             }
             catch
             {
@@ -30,7 +34,7 @@ namespace UBSocial.Controllers
         // GET BY ID
         // Ejemplo: (GET) localhost:5665/proposal/1
 
-        [HttpGet("{id}")]
+        [HttpGet("n/{id}")]
         [Authorize]
         public IActionResult ProposalGetById(int id)
         {
@@ -55,6 +59,8 @@ namespace UBSocial.Controllers
         public IActionResult Delete(int id)
         {
             string success = "Error al eliminar la propuesta";
+            int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
             try
             {
                 if (id >= 0)
@@ -62,7 +68,8 @@ namespace UBSocial.Controllers
 
                     Dictionary<string, object> args = new Dictionary<string, object> {
 
-                    {"pId",id}
+                    {"pId",id},
+                    {"pIdUser",idUser}
 
                     };
 
@@ -93,13 +100,16 @@ namespace UBSocial.Controllers
         public IActionResult Create(Proposal proposal)
         {
             string success = "Error al crear la propuesta";
+            int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
             try
             {
                 if (proposal.Title != null && proposal.Description != null)
                 {
                     Dictionary<string, object> args = new Dictionary<string, object> {
                          {"pTitle",proposal.Title},
-                         {"pDescription",proposal.Description}
+                         {"pDescription",proposal.Description},
+                         {"pIdUser",idUser}
                     };
                     success = DBHelper.CallNonQuery("spProposalCreate", args);
                     if (success == "1")
@@ -126,6 +136,8 @@ namespace UBSocial.Controllers
         public IActionResult Update(Proposal proposal)
         {
             string success = "Error al modificar la propuesta";
+            int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
             try
             {
                 if (proposal.Title != null && proposal.Description != null && proposal.Id != null)
@@ -134,6 +146,7 @@ namespace UBSocial.Controllers
                          {"pTitle",proposal.Title},
                          {"pDescription",proposal.Description},
                          {"pId", proposal.Id},
+                         {"pIdUser",idUser}
                     };
                     success = DBHelper.CallNonQuery("spProposalUpdate", args);
                     if (success == "1")
