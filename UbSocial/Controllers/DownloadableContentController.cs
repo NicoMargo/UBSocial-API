@@ -18,7 +18,6 @@ namespace UBSocial.Controllers
         // Ejemplo: (PUT) localhost:5665/downloadableContent
 
         [HttpGet]
-        [Authorize]
         public IActionResult DownloadableContentGet()
         {
             try
@@ -35,7 +34,6 @@ namespace UBSocial.Controllers
         // Ejemplo: (GET) localhost:5665/downloadableContent/1
 
         [HttpGet("{id}")]
-        [Authorize]
         public IActionResult DownloadableContentGetById(int id)
         {
             try
@@ -78,7 +76,6 @@ namespace UBSocial.Controllers
 
         [HttpGet]
         [Route("subject/{id}")]
-        [Authorize]
         public IActionResult DownloadableContentGetBySubject(int id)
         {
             try

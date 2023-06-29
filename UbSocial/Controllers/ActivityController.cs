@@ -53,6 +53,7 @@ namespace UBSocial.Controllers
         // Ejemplo: (GET) localhost:5665/activity/current
 
         [HttpGet("current")]
+        [Authorize]
         public IActionResult ActivityGetByToken()
         {
             int? userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
@@ -265,7 +266,6 @@ namespace UBSocial.Controllers
         // Ejemplo: (POST) localhost:5665/activity
 
         [HttpPost]
-        [Authorize]
         public IActionResult ActivityMember(Activity activity)
         {
             string success = "Error al mostrar los usuarios de la actividad";

@@ -15,7 +15,6 @@ namespace UBSocial.Controllers
         // Ejemplo: (GET) localhost:5665/proposal
 
         [HttpGet("page/{page}")]
-        [Authorize]
         public IActionResult ProposalGet(int page = 0)
         {
             try
@@ -35,7 +34,6 @@ namespace UBSocial.Controllers
         // Ejemplo: (GET) localhost:5665/proposal/1
 
         [HttpGet("{id}")]
-        [Authorize]
         public IActionResult ProposalGetById(int id)
         {
             
