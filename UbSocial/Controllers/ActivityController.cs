@@ -14,7 +14,7 @@ namespace UBSocial.Controllers
         // GET ALL
         // Ejemplo: (GET) localhost:5665/activity
 
-        [HttpGet("{page}")]
+        [HttpGet("page/{page}")]
         public IActionResult ActivityGet(int page = 0)
         {
             try

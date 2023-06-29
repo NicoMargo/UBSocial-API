@@ -14,7 +14,7 @@ namespace UBSocial.Controllers
         // GET ALL
         // Ejemplo: (GET) localhost:5665/proposal
 
-        [HttpGet("{page}")]
+        [HttpGet("page/{page}")]
         [Authorize]
         public IActionResult ProposalGet(int page = 0)
         {
