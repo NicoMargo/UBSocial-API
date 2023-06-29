@@ -68,6 +68,7 @@ namespace UBSocial.Controllers
         // Ejemplo: (DELETE) localhost:5665/activity/1
 
         [HttpDelete("{id}")]
+        [Authorize]
         public IActionResult Delete(int id)
         {
             string success = "Error al eliminar la actividad";
@@ -105,7 +106,6 @@ namespace UBSocial.Controllers
 
         [HttpPost]
         [Authorize]
-
         public IActionResult Create([FromForm] Activity activity)
         {
             string success = "Error al crear la actividad";

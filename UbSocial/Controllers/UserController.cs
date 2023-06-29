@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using UbSocial.Models;
 using UbSocial.Models.Helpers;
 
@@ -49,6 +50,7 @@ namespace UbSocial.Controllers
         // Ejemplo: (GET) localhost:5665/User/1
 
         [HttpGet]
+        [Authorize]
         public IActionResult UserGet()
         {
             try
@@ -65,6 +67,7 @@ namespace UbSocial.Controllers
         // Ejemplo: (GET) localhost:5665/User/1
 
         [HttpGet("{id}")]
+        [Authorize]
         public IActionResult UserGetById(int id)
         {
             try
@@ -128,6 +131,7 @@ namespace UbSocial.Controllers
         // Ejemplo: (DELETE) localhost:5665/User/1
 
         [HttpDelete("{id}")]
+        [Authorize]
         public IActionResult Delete(int id)
         {
             string success = "";
@@ -159,6 +163,7 @@ namespace UbSocial.Controllers
         // Ejemplo: (PUT) localhost:5665/User
 
         [HttpPut]
+        [Authorize]
         public IActionResult Update(User user)
         {
             string success = "Error al modificar el usuario";

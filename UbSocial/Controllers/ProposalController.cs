@@ -14,6 +14,7 @@ namespace UBSocial.Controllers
         // Ejemplo: (GET) localhost:5665/proposal
 
         [HttpGet]
+        [Authorize]
         public IActionResult ProposalGet()
         {
             try
@@ -30,6 +31,7 @@ namespace UBSocial.Controllers
         // Ejemplo: (GET) localhost:5665/proposal/1
 
         [HttpGet("{id}")]
+        [Authorize]
         public IActionResult ProposalGetById(int id)
         {
             try
@@ -49,6 +51,7 @@ namespace UBSocial.Controllers
         // Ejemplo: (DELETE) localhost:5665/proposal/1
 
         [HttpDelete("{id}")]
+        [Authorize]
         public IActionResult Delete(int id)
         {
             string success = "Error al eliminar la propuesta";
@@ -119,6 +122,7 @@ namespace UBSocial.Controllers
         // Ejemplo: (PUT) localhost:5665/proposal
 
         [HttpPut]
+        [Authorize]
         public IActionResult Update(Proposal proposal)
         {
             string success = "Error al modificar la propuesta";
