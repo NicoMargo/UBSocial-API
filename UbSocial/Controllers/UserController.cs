@@ -45,7 +45,7 @@ namespace UbSocial.Controllers
             }
             catch (Exception ex)
             {
-                return NotFound(ex.Message);
+                return NotFound("Los datos ingresados son incorrectos. Vuelve a intentar.");
             }
         }
 
@@ -66,7 +66,7 @@ namespace UbSocial.Controllers
         }
 
         // GET BY ID
-        // Ejemplo: (GET) localhost:5665/User/1
+        // Ejemplo: (GET) localhost:7004/User/1
 
         [HttpGet("{id}")]
         public IActionResult UserGetById(int id)
@@ -85,7 +85,7 @@ namespace UbSocial.Controllers
         }
 
         // GET BY TOKEN
-        // Ejemplo: (GET) localhost:5665/User/current
+        // Ejemplo: (GET) localhost:7004/User/current
 
         [HttpGet("current")]
         public IActionResult UserGetByToken()
@@ -150,11 +150,11 @@ namespace UbSocial.Controllers
         }
 
         // DELETE BY ID
-        // Ejemplo: (DELETE) localhost:5665/User/1
+        // Ejemplo: (DELETE) localhost:7004/User/1
 
-        [HttpDelete("{id}")]
+        [HttpDelete]
         [Authorize]
-        public IActionResult Delete(int id)
+        public IActionResult Delete()
         {
             int? userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
@@ -184,7 +184,7 @@ namespace UbSocial.Controllers
         }
 
         // UPDATE
-        // Ejemplo: (PUT) localhost:5665/User
+        // Ejemplo: (PUT) localhost:7004/User
 
         [HttpPut]
         [Authorize]

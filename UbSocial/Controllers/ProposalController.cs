@@ -12,7 +12,7 @@ namespace UBSocial.Controllers
     public class ProposalController : ControllerBase
     {
         // GET ALL
-        // Ejemplo: (GET) localhost:5665/proposal
+        // Ejemplo: (GET) localhost:7004/proposal
 
         [HttpGet("page/{page}")]
         public IActionResult ProposalGet(int page = 0)
@@ -31,7 +31,7 @@ namespace UBSocial.Controllers
         }
 
         // GET BY ID
-        // Ejemplo: (GET) localhost:5665/proposal/1
+        // Ejemplo: (GET) localhost:7004/proposal/1
 
         [HttpGet("{id}")]
         public IActionResult ProposalGetById(int id)
@@ -51,7 +51,7 @@ namespace UBSocial.Controllers
         }
 
         // GET BY Id User
-        // Ejemplo: (GET) localhost:5665/proposal/current
+        // Ejemplo: (GET) localhost:7004/proposal/current
 
         [HttpGet("current")]
         [Authorize]
@@ -73,7 +73,7 @@ namespace UBSocial.Controllers
         }
 
         // DELETE BY ID
-        // Ejemplo: (DELETE) localhost:5665/proposal/1
+        // Ejemplo: (DELETE) localhost:7004/proposal/1
 
         [HttpDelete("{id}")]
         [Authorize]
@@ -113,7 +113,7 @@ namespace UBSocial.Controllers
         }
 
         // CREATE
-        // Ejemplo: (POST) localhost:5665/proposal
+        // Ejemplo: (POST) localhost:7004/proposal
 
         [HttpPost]
         [Authorize]
@@ -150,7 +150,7 @@ namespace UBSocial.Controllers
         }
 
         // UPDATE
-        // Ejemplo: (PUT) localhost:5665/proposal
+        // Ejemplo: (PUT) localhost:7004/proposal
 
         [HttpPut]
         [Authorize]

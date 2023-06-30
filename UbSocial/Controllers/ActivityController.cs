@@ -12,7 +12,7 @@ namespace UBSocial.Controllers
     public class ActivityController : ControllerBase
     {
         // GET ALL
-        // Ejemplo: (GET) localhost:5665/activity
+        // Ejemplo: (GET) localhost:7004/activity
 
         [HttpGet("page/{page}")]
         public IActionResult ActivityGet(int page = 0)
@@ -31,7 +31,7 @@ namespace UBSocial.Controllers
         }
 
         // GET BY ID
-        // Ejemplo: (GET) localhost:5665/activity/1
+        // Ejemplo: (GET) localhost:7004/activity/1
 
         [HttpGet("{id}")]
         public IActionResult ActivityGetById(int id)
@@ -50,7 +50,7 @@ namespace UBSocial.Controllers
         }
 
         // GET BY Id User
-        // Ejemplo: (GET) localhost:5665/activity/current
+        // Ejemplo: (GET) localhost:7004/activity/current
 
         [HttpGet("current")]
         [Authorize]
@@ -72,7 +72,7 @@ namespace UBSocial.Controllers
         }
 
         // GET BY TITLE
-        // Ejemplo: (GET) localhost:5665/activity/currentTitle/valorant
+        // Ejemplo: (GET) localhost:7004/activity/currentTitle/valorant
 
         [HttpGet("currentTitle/{title}")]
         public IActionResult ActivityGetByTitle(string title)
@@ -91,7 +91,7 @@ namespace UBSocial.Controllers
         }
 
         // DELETE BY ID
-        // Ejemplo: (DELETE) localhost:5665/activity/1
+        // Ejemplo: (DELETE) localhost:7004/activity/1
 
         [HttpDelete("{id}")]
         [Authorize]
@@ -131,7 +131,7 @@ namespace UBSocial.Controllers
         }
 
         // CREATE
-        // Ejemplo: (POST) localhost:5665/activity
+        // Ejemplo: (POST) localhost:7004/activity
 
         [HttpPost]
         [Authorize]
@@ -197,7 +197,7 @@ namespace UBSocial.Controllers
         }
 
         // UPDATE
-        // Ejemplo: (PUT) localhost:5665/activity
+        // Ejemplo: (PUT) localhost:7004/activity
 
         [HttpPut]
         [Authorize]
@@ -263,7 +263,7 @@ namespace UBSocial.Controllers
         }
 
         // ACTIVITY MEMBERS
-        // Ejemplo: (POST) localhost:5665/activity
+        // Ejemplo: (POST) localhost:7004/activity
 
         [HttpPost]
         public IActionResult ActivityMember(Activity activity)

@@ -11,7 +11,7 @@ namespace UBSocial.Controllers
     public class SubjectController : ControllerBase
     {
         // GET ALL
-        // Ejemplo: (GET) localhost:5665/Subject
+        // Ejemplo: (GET) localhost:7004/Subject
 
         [HttpGet]
         public IActionResult SubjectGet()
@@ -27,7 +27,7 @@ namespace UBSocial.Controllers
         }
 
         // GET ALL
-        // Ejemplo: (GET) localhost:5665/Subject/1
+        // Ejemplo: (GET) localhost:7004/Subject/1
 
         [HttpGet("{id}")]
         public IActionResult SubjectGetById(int id)

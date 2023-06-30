@@ -92,7 +92,7 @@ namespace UBSocial.Controllers
         }
 
         // DELETE BY ID
-        // Ejemplo: (DELETE) localhost:5665/downloadableContent/1
+        // Ejemplo: (DELETE) localhost:7004/downloadableContent/1
 
         [HttpDelete("{id}")]
         [Authorize]
@@ -130,7 +130,7 @@ namespace UBSocial.Controllers
         }
 
         // CREATE
-        // Ejemplo: (POST) localhost:5665/downloadableContent
+        // Ejemplo: (POST) localhost:7004/downloadableContent
 
         [HttpPost]
         [Authorize]
@@ -190,7 +190,7 @@ namespace UBSocial.Controllers
         }
 
         // DOWNLOAD
-        // Ejemplo: (GET) localhost:5665/downloadableContent/download/pato.gif/1
+        // Ejemplo: (GET) localhost:7004/downloadableContent/download/pato.gif/1
 
         [HttpGet]
         [Authorize]
