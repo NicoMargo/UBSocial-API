@@ -12,7 +12,7 @@ namespace UBSocial.Controllers
     public class ProposalController : ControllerBase
     {
         // GET ALL
-        // Ejemplo: (GET) localhost:5665/proposal
+        // Ejemplo: (GET) localhost:7004/proposal
 
         [HttpGet]
         [Route("{page}")]
@@ -33,7 +33,7 @@ namespace UBSocial.Controllers
         }
 
         // GET BY ID
-        // Ejemplo: (GET) localhost:5665/proposal/1
+        // Ejemplo: (GET) localhost:7004/proposal/1
 
         //[HttpGet("{id}")]
         //public IActionResult ProposalGetById(int id)
@@ -52,21 +52,23 @@ namespace UBSocial.Controllers
         //    }
         //}
 
-        // GET BY TOKEN
-        // Ejemplo: (GET) localhost:5665/proposal/current
+
+
+        // GET BY Id User
+        // Ejemplo: (GET) localhost:7004/proposal/current
 
         [HttpGet("current")]
         [Authorize]
-        public IActionResult ProposalGetByToken()
+        public IActionResult ProposalGetByIdUser()
         {
             int? userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
             try
             {
                 Dictionary<string, object> args = new Dictionary<string, object> {
-                    {"pId",userId}
+                    {"pIdUser",userId}
                 };
-                return Ok(DBHelper.callProcedureReader("spProposalGetById", args));
+                return Ok(DBHelper.callProcedureReader("spProposalGetByIdUser", args));
             }
             catch
             {
@@ -75,7 +77,7 @@ namespace UBSocial.Controllers
         }
 
         // DELETE BY ID
-        // Ejemplo: (DELETE) localhost:5665/proposal/1
+        // Ejemplo: (DELETE) localhost:7004/proposal/1
 
         [HttpDelete("{id}")]
         [Authorize]
@@ -115,7 +117,7 @@ namespace UBSocial.Controllers
         }
 
         // CREATE
-        // Ejemplo: (POST) localhost:5665/proposal
+        // Ejemplo: (POST) localhost:7004/proposal
 
         [HttpPost]
         [Authorize]
@@ -152,7 +154,7 @@ namespace UBSocial.Controllers
         }
 
         // UPDATE
-        // Ejemplo: (PUT) localhost:5665/proposal
+        // Ejemplo: (PUT) localhost:7004/proposal
 
         [HttpPut]
         [Authorize]

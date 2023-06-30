@@ -15,7 +15,7 @@ namespace UBSocial.Controllers
     {
 
         // GET ALL
-        // Ejemplo: (PUT) localhost:5665/downloadableContent
+        // Ejemplo: (PUT) localhost:7004/downloadableContent
 
         [HttpGet]
         public IActionResult DownloadableContentGet()
@@ -31,7 +31,7 @@ namespace UBSocial.Controllers
         }
 
         // GET BY ID
-        // Ejemplo: (GET) localhost:5665/downloadableContent/1
+        // Ejemplo: (GET) localhost:7004/downloadableContent/1
 
         [HttpGet("{id}")]
         public IActionResult DownloadableContentGetById(int id)
@@ -49,21 +49,21 @@ namespace UBSocial.Controllers
             }
         }
 
-        // GET BY TOKEN
-        // Ejemplo: (GET) localhost:5665/downloadableContent/current
+        // GET BY Id User
+        // Ejemplo: (GET) localhost:7004/downloadableContent/current
 
         [HttpGet("current")]
         [Authorize]
-        public IActionResult DownloadableContentGetByToken()
+        public IActionResult DownloadableContentGetByIdUser()
         {
             int? userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
             try
             {
                 Dictionary<string, object> args = new Dictionary<string, object> {
-                    {"pId",userId}
+                    {"pIdUser",userId}
                 };
-                return Ok(DBHelper.callProcedureReader("spDownloadableContentGetById", args));
+                return Ok(DBHelper.callProcedureReader("spDownloadableContentGetByIdUser", args));
             }
             catch
             {
@@ -72,7 +72,7 @@ namespace UBSocial.Controllers
         }
 
         // GET BY SUBJECT
-        // Ejemplo: (GET) localhost:5665/downloadableContent/1
+        // Ejemplo: (GET) localhost:7004/downloadableContent/1
 
         [HttpGet]
         [Route("subject/{id}")]
@@ -81,7 +81,7 @@ namespace UBSocial.Controllers
             try
             {
                 Dictionary<string, object> args = new Dictionary<string, object> {
-                    {"pId",id}
+                    {"pIdSubject",id}
                 };
                 return Ok(DBHelper.callProcedureReader("spDownloadableContentGetBySubject", args));
             }
@@ -92,7 +92,7 @@ namespace UBSocial.Controllers
         }
 
         // DELETE BY ID
-        // Ejemplo: (DELETE) localhost:5665/downloadableContent/1
+        // Ejemplo: (DELETE) localhost:7004/downloadableContent/1
 
         [HttpDelete("{id}")]
         [Authorize]
@@ -130,7 +130,7 @@ namespace UBSocial.Controllers
         }
 
         // CREATE
-        // Ejemplo: (POST) localhost:5665/downloadableContent
+        // Ejemplo: (POST) localhost:7004/downloadableContent
 
         [HttpPost]
         [Authorize]
@@ -164,7 +164,7 @@ namespace UBSocial.Controllers
                     }
 
                     Dictionary<string, object> args = new Dictionary<string, object> {
-                         {"pTitle",downloadableContent.File.FileName},
+                         {"pTitle",downloadableContent.Title},
                          {"pURL","/Content/" + downloadableContent.File.FileName},
                          {"pIdSubject",downloadableContent.IdSubject},
                          {"pIdUser",idUser}
@@ -190,19 +190,20 @@ namespace UBSocial.Controllers
         }
 
         // DOWNLOAD
-        // Ejemplo: (GET) localhost:5665/downloadableContent/download/pato.gif/1
+        // Ejemplo: (GET) localhost:7004/downloadableContent/download/pato.gif/1
 
         [HttpGet]
         [Authorize]
-        [Route("download/{URL}/{id}")]
-        public IActionResult Download(string URL, int id)
+        [Route("download/{URL}")]
+        public IActionResult Download(string URL)
         {
             string success = "Error al crear el contenido";
+            int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
             try
             {
                 Dictionary<string, object> args = new Dictionary<string, object> {
-                    {"pId",id}
+                    {"pId",idUser}
                 };
 
                 success = DBHelper.callProcedureReader("spCanDownloadableContent", args);

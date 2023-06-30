@@ -12,7 +12,7 @@ namespace UBSocial.Controllers
     public class ActivityController : ControllerBase
     {
         // GET ALL
-        // Ejemplo: (GET) localhost:5665/activity
+        // Ejemplo: (GET) localhost:7004/activity
 
         [Route("{page}")]
         [Route("")]
@@ -33,7 +33,7 @@ namespace UBSocial.Controllers
         }
 
         // GET BY ID
-        // Ejemplo: (GET) localhost:5665/activity/1
+        // Ejemplo: (GET) localhost:7004/activity/ActivityIdentifier/1
 
         [HttpGet("ActivityIdentifier/{id}")]
         public IActionResult ActivityGetById(int id)
@@ -51,21 +51,21 @@ namespace UBSocial.Controllers
             }
         }
 
-        // GET BY TOKEN
-        // Ejemplo: (GET) localhost:5665/activity/current
+        // GET BY Id User
+        // Ejemplo: (GET) localhost:7004/activity/current
 
         [HttpGet("current")]
         [Authorize]
-        public IActionResult ActivityGetByToken()
+        public IActionResult ActivityGetByIdUser()
         {
             int? userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
             try
             {
                 Dictionary<string, object> args = new Dictionary<string, object> {
-                    {"pId",userId}
+                    {"pIdUser",userId}
                 };
-                return Ok(DBHelper.callProcedureReader("spActivityGetById", args));
+                return Ok(DBHelper.callProcedureReader("spActivityGetByIdUser", args));
             }
             catch
             {
@@ -74,7 +74,7 @@ namespace UBSocial.Controllers
         }
 
         // GET BY TITLE
-        // Ejemplo: (GET) localhost:5665/activity/currentTitle/valorant
+        // Ejemplo: (GET) localhost:7004/activity/currentTitle/valorant
 
         [HttpGet("currentTitle/{title}")]
         public IActionResult ActivityGetByTitle(string title)
@@ -93,7 +93,7 @@ namespace UBSocial.Controllers
         }
 
         // DELETE BY ID
-        // Ejemplo: (DELETE) localhost:5665/activity/1
+        // Ejemplo: (DELETE) localhost:7004/activity/1
 
         [HttpDelete("{id}")]
         [Authorize]
@@ -133,7 +133,7 @@ namespace UBSocial.Controllers
         }
 
         // CREATE
-        // Ejemplo: (POST) localhost:5665/activity
+        // Ejemplo: (POST) localhost:7004/activity
 
         [HttpPost]
         [Authorize]
@@ -170,9 +170,8 @@ namespace UBSocial.Controllers
                          {"pDescription",activity.Description},
                          {"pContact",activity.Contact},
                          // {"pActivityDate",activity.ActivityDate},
-                         // {"pActivityDateFinished",activity.ActivityDateFinished},
-                         {"pURL","/ActivityPhotos/" + activity.File.FileName},
-                         {"pIdSubject",activity.IdActivity},
+                         {"pDateFinishActivity",activity.ActivityDateFinished},
+                         {"pURLphotos","/ActivityPhotos/" + activity.File.FileName},
                          {"pIdUser",idUser}
                     };
 
@@ -195,22 +194,22 @@ namespace UBSocial.Controllers
             {
                 return StatusCode(500, success);
             }
-            
+
         }
 
         // UPDATE
-        // Ejemplo: (PUT) localhost:5665/activity
+        // Ejemplo: (PUT) localhost:7004/activity
 
-        [HttpPut]
+        [HttpPut("{id}")]
         [Authorize]
-        public IActionResult Update([FromForm] Activity activity)
+        public IActionResult Update([FromForm] Activity activity, int id)
         {
             string success = "Error al modificar la actividad";
             int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
             try
             {
-                if (activity.File.FileName != null && activity.Title != null && activity.Description != null && activity.Id != null && activity.Contact != null && activity.ActivityDate != null && activity.URLPhotos != null && activity.IdUser != null)
+                if (activity.File.FileName != null && activity.Title != null && activity.Description != null && id != null && activity.Contact != null && activity.ActivityDateFinished != null && idUser != null)
                 {
                     var filePath = Path.Combine(Directory.GetCurrentDirectory(), "WWWRoot", "ActivityPhotos", activity.File.FileName);
 
@@ -236,15 +235,15 @@ namespace UBSocial.Controllers
                          {"pDescription",activity.Description},
                          {"pContact",activity.Contact},
                          // {"pActivityDate",activity.ActivityDate},
-                         // {"pActivityDateFinished",activity.ActivityDateFinished},
-                         {"pURL","/ActivityPhotos/" + activity.File.FileName},
-                         {"pIdSubject",activity.IdActivity},
+                         {"pDateFinishActivity",activity.ActivityDateFinished},
+                         {"pURLphotos","/ActivityPhotos/" + activity.File.FileName},
+                         {"pId",id},
                          {"pIdUser",idUser}
                     };
 
                     success = DBHelper.CallNonQuery("spActivityUpdate", args);
 
-                    if (success == "4")
+                    if (success == "1")
                     {
                         return Ok();
                     }
@@ -264,23 +263,25 @@ namespace UBSocial.Controllers
             
         }
 
-        // ACTIVITY MEMBERS
-        // Ejemplo: (POST) localhost:5665/activity
+        // ACTIVITY JOIN
+        // Ejemplo: (POST) localhost:7004/activity/join
 
-        [HttpPost]
-        public IActionResult ActivityMember(Activity activity)
+        [HttpPost("join/{id}")]
+        public IActionResult ActivityJoin(int id)
         {
-            string success = "Error al mostrar los usuarios de la actividad";
+            string success = "Error al unirse a la actividad";
+            int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
             try
             {
                 Dictionary<string, object> args = new Dictionary<string, object> {
-                         {"pIdActivity",activity.IdActivity},
-                         {"pIdUser",activity.IdUser}
+                         {"pIdActivity",id},
+                         {"pIdUser",idUser}
                 };
 
-                success = DBHelper.CallNonQuery("spActivityMembers", args);
+                success = DBHelper.CallNonQuery("spActivityJoin", args);
 
-                if (success == "1")
+                if (success == "2")
                 {
                     return Ok();
                 }
