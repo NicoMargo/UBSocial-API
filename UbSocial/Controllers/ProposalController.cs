@@ -14,7 +14,9 @@ namespace UBSocial.Controllers
         // GET ALL
         // Ejemplo: (GET) localhost:7004/proposal
 
-        [HttpGet("page/{page}")]
+        [HttpGet]
+        [Route("{page}")]
+        [Route("")]
         public IActionResult ProposalGet(int page = 0)
         {
             try
@@ -33,22 +35,22 @@ namespace UBSocial.Controllers
         // GET BY ID
         // Ejemplo: (GET) localhost:7004/proposal/1
 
-        [HttpGet("{id}")]
-        public IActionResult ProposalGetById(int id)
-        {
+        //[HttpGet("{id}")]
+        //public IActionResult ProposalGetById(int id)
+        //{
             
-            try
-            {
-                Dictionary<string, object> args = new Dictionary<string, object> {
-                    {"pId",id}
-                };
-                return Ok(DBHelper.callProcedureReader("spProposalGetById", args));
-            }
-            catch
-            {
-                return StatusCode(500, "Error al obtener la informacion de las propuestas");
-            }
-        }
+        //    try
+        //    {
+        //        Dictionary<string, object> args = new Dictionary<string, object> {
+        //            {"pId",id}
+        //        };
+        //        return Ok(DBHelper.callProcedureReader("spProposalGetById", args));
+        //    }
+        //    catch
+        //    {
+        //        return StatusCode(500, "Error al obtener la informacion de las propuestas");
+        //    }
+        //}
 
         // GET BY Id User
         // Ejemplo: (GET) localhost:7004/proposal/current
