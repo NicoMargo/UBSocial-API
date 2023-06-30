@@ -15,7 +15,7 @@ namespace UBSocial.Controllers
     {
 
         // GET ALL
-        // Ejemplo: (PUT) localhost:5665/downloadableContent
+        // Ejemplo: (PUT) localhost:7004/downloadableContent
 
         [HttpGet]
         public IActionResult DownloadableContentGet()
@@ -31,7 +31,7 @@ namespace UBSocial.Controllers
         }
 
         // GET BY ID
-        // Ejemplo: (GET) localhost:5665/downloadableContent/1
+        // Ejemplo: (GET) localhost:7004/downloadableContent/1
 
         [HttpGet("{id}")]
         public IActionResult DownloadableContentGetById(int id)
@@ -50,7 +50,7 @@ namespace UBSocial.Controllers
         }
 
         // GET BY Id User
-        // Ejemplo: (GET) localhost:5665/downloadableContent/current
+        // Ejemplo: (GET) localhost:7004/downloadableContent/current
 
         [HttpGet("current")]
         [Authorize]
@@ -72,7 +72,7 @@ namespace UBSocial.Controllers
         }
 
         // GET BY SUBJECT
-        // Ejemplo: (GET) localhost:5665/downloadableContent/1
+        // Ejemplo: (GET) localhost:7004/downloadableContent/1
 
         [HttpGet]
         [Route("subject/{id}")]
@@ -81,7 +81,7 @@ namespace UBSocial.Controllers
             try
             {
                 Dictionary<string, object> args = new Dictionary<string, object> {
-                    {"pId",id}
+                    {"pIdSubject",id}
                 };
                 return Ok(DBHelper.callProcedureReader("spDownloadableContentGetBySubject", args));
             }
@@ -164,7 +164,7 @@ namespace UBSocial.Controllers
                     }
 
                     Dictionary<string, object> args = new Dictionary<string, object> {
-                         {"pTitle",downloadableContent.File.FileName},
+                         {"pTitle",downloadableContent.Title},
                          {"pURL","/Content/" + downloadableContent.File.FileName},
                          {"pIdSubject",downloadableContent.IdSubject},
                          {"pIdUser",idUser}
@@ -194,15 +194,16 @@ namespace UBSocial.Controllers
 
         [HttpGet]
         [Authorize]
-        [Route("download/{URL}/{id}")]
-        public IActionResult Download(string URL, int id)
+        [Route("download/{URL}")]
+        public IActionResult Download(string URL)
         {
             string success = "Error al crear el contenido";
+            int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
             try
             {
                 Dictionary<string, object> args = new Dictionary<string, object> {
-                    {"pId",id}
+                    {"pId",idUser}
                 };
 
                 success = DBHelper.callProcedureReader("spCanDownloadableContent", args);

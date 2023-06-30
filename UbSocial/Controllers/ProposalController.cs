@@ -52,6 +52,8 @@ namespace UBSocial.Controllers
         //    }
         //}
 
+
+
         // GET BY Id User
         // Ejemplo: (GET) localhost:7004/proposal/current
 
