@@ -49,21 +49,21 @@ namespace UBSocial.Controllers
             }
         }
 
-        // GET BY TOKEN
+        // GET BY Id User
         // Ejemplo: (GET) localhost:5665/activity/current
 
         [HttpGet("current")]
         [Authorize]
-        public IActionResult ActivityGetByToken()
+        public IActionResult ActivityGetByIdUser()
         {
             int? userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
             try
             {
                 Dictionary<string, object> args = new Dictionary<string, object> {
-                    {"pId",userId}
+                    {"pIdUser",userId}
                 };
-                return Ok(DBHelper.callProcedureReader("spActivityGetById", args));
+                return Ok(DBHelper.callProcedureReader("spActivityGetByIdUser", args));
             }
             catch
             {

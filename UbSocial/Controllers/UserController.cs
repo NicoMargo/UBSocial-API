@@ -15,7 +15,7 @@ namespace UbSocial.Controllers
     {
 
         // LOGIN
-        // Ejemplo: (GET) localhost:5665/User/userLogin
+        // Ejemplo: (POST) localhost:7004/user/userLogin
 
         [HttpPost]
         [Route("userLogin")]
@@ -50,7 +50,7 @@ namespace UbSocial.Controllers
         }
 
         // GET ALL
-        // Ejemplo: (GET) localhost:5665/User/1
+        // Ejemplo: (GET) localhost:7004/User/1
 
         [HttpGet]
         public IActionResult UserGet()

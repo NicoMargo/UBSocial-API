@@ -49,21 +49,21 @@ namespace UBSocial.Controllers
             }
         }
 
-        // GET BY TOKEN
+        // GET BY Id User
         // Ejemplo: (GET) localhost:5665/downloadableContent/current
 
         [HttpGet("current")]
         [Authorize]
-        public IActionResult DownloadableContentGetByToken()
+        public IActionResult DownloadableContentGetByIdUser()
         {
             int? userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
             try
             {
                 Dictionary<string, object> args = new Dictionary<string, object> {
-                    {"pId",userId}
+                    {"pIdUser",userId}
                 };
-                return Ok(DBHelper.callProcedureReader("spDownloadableContentGetById", args));
+                return Ok(DBHelper.callProcedureReader("spDownloadableContentGetByIdUser", args));
             }
             catch
             {
