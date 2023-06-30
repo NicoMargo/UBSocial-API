@@ -33,7 +33,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy("_corsPolicy",
                           policy =>
                           {
-                              policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                              policy.WithOrigins("http://localhost:3000", "http://frontadmin.ayukelen.com.ar")
+                                    .AllowAnyHeader()
+                                    .AllowAnyMethod()
+                                    .AllowCredentials();
                           });
 });
 
@@ -43,14 +46,7 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 
-app.UseStaticFiles(new StaticFileOptions()
-{
-    OnPrepareResponse = ctx => {
-        ctx.Context.Response.Headers.Append("Access-Control-Allow-Origin", "*");
-        ctx.Context.Response.Headers.Append("Access-Control-Allow-Headers",
-          "Origin, X-Requested-With, Content-Type, Accept");
-    },
-});
+app.UseStaticFiles();
 
 app.UseCors("_corsPolicy");
 app.UseAuthentication();

@@ -16,6 +16,7 @@ namespace UBSocial.Controllers
 
         [Route("{page}")]
         [Route("")]
+        [HttpGet]
         public IActionResult ActivityGet(int page = 0)
         {
             try
