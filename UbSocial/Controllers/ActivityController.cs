@@ -14,7 +14,8 @@ namespace UBSocial.Controllers
         // GET ALL
         // Ejemplo: (GET) localhost:5665/activity
 
-        [HttpGet("page/{page}")]
+        [Route("{page}")]
+        [Route("")]
         public IActionResult ActivityGet(int page = 0)
         {
             try
@@ -33,7 +34,7 @@ namespace UBSocial.Controllers
         // GET BY ID
         // Ejemplo: (GET) localhost:5665/activity/1
 
-        [HttpGet("{id}")]
+        [HttpGet("ActivityIdentifier/{id}")]
         public IActionResult ActivityGetById(int id)
         {
             try
