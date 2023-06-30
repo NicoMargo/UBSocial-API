@@ -106,7 +106,7 @@ namespace UbSocial.Controllers
         }
 
         // CREATE
-        // Ejemplo: (POST) localhost:5665/User
+        // Ejemplo: (POST) localhost:7004/User
 
         [HttpPost]
         public IActionResult Create(User user)
