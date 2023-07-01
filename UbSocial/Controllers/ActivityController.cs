@@ -16,6 +16,7 @@ namespace UBSocial.Controllers
 
         [Route("{page}")]
         [Route("")]
+        [HttpGet]
         public IActionResult ActivityGet(int page = 0)
         {
             try
@@ -143,7 +144,7 @@ namespace UBSocial.Controllers
 
             try
             {
-                if (activity.File.FileName != null)
+                if (activity.Description != null && activity.Title != null && activity.Contact != null && activity.ActivityDateFinished != null && activity.File.FileName != null)
                 {
                     var filePath = Path.Combine(Directory.GetCurrentDirectory(), "WWWRoot", "ActivityPhotos", activity.File.FileName);
 
@@ -183,7 +184,6 @@ namespace UBSocial.Controllers
                          {"pTitle",activity.Title},
                          {"pDescription",activity.Description},
                          {"pContact",activity.Contact},
-                         // {"pActivityDate",activity.ActivityDate},
                          {"pDateFinishActivity",activity.ActivityDateFinished},
                          {"pURLphotos","/ActivityPhotos/" + activity.File.FileName},
                          {"pIdUser",idUser}
@@ -202,11 +202,15 @@ namespace UBSocial.Controllers
                     }
                 }
 
-                return StatusCode(500, success);
+                return StatusCode(400, "Se enviaron campos incompletos");
             }
-            catch
+            catch (NullReferenceException ex)
             {
-                return StatusCode(500, success);
+                return StatusCode(400, "Se enviaron campos incompletos");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error al crear la actividad");
             }
 
         }

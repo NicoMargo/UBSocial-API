@@ -72,7 +72,7 @@ namespace UBSocial.Controllers
         }
 
         // GET BY SUBJECT
-        // Ejemplo: (GET) localhost:7004/downloadableContent/1
+        // Ejemplo: (GET) localhost:7004/downloadableContent/subject/1
 
         [HttpGet]
         [Route("subject/{id}")]
@@ -134,7 +134,6 @@ namespace UBSocial.Controllers
 
         [HttpPost]
         [Authorize]
-
         public IActionResult Create([FromForm] DownloadableContent downloadableContent)
         {
             string success = "Error al crear el contenido";
