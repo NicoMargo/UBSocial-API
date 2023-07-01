@@ -357,5 +357,38 @@ namespace UBSocial.Controllers
 
         }
 
+        public class Timers
+        {
+            private static System.Timers.Timer _timer;
+
+            public static void Start()
+            {
+                _timer = new System.Timers.Timer();
+
+                //Calcula cuánto tiempo falta para las 00:00
+                DateTime now = DateTime.Now;
+                DateTime midnight = new DateTime(now.Year, now.Month, now.Day + 1, 0, 0, 0);
+                double msUntilMidnight = (midnight - now).TotalMilliseconds;
+
+                //Establece el intervalo al número calculado de milisegundos hasta la medianoche.
+                _timer.Interval = msUntilMidnight;
+
+                //Configura el evento para que se ejecute en el intervalo.
+                _timer.Elapsed += new System.Timers.ElapsedEventHandler(TimerElapsed);
+
+                //Inicia el temporizador.
+                _timer.Start();
+            }
+
+            private static void TimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
+            {
+                //Store procedure a ejecutar
+                DBHelper.callProcedureReader("spActivityCleaner", new Dictionary<string, object> { });
+
+                //Reinicia el intervalo a 24 horas.
+                _timer.Interval = TimeSpan.FromHours(24).TotalMilliseconds;
+            }
+        }
+
     }
 }
