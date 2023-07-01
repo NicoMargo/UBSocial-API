@@ -152,6 +152,21 @@ namespace UBSocial.Controllers
                     var extension = Path.GetExtension(originalFilePath);
                     var counter = 1;
 
+                    const int maxFileSizeMB = 15;
+                    FileInfo fileInfo = new FileInfo(filePath);
+
+                    // Obtener el tamaño del archivo en bytes
+                    long fileSizeInBytes = fileInfo.Length;
+
+                    // Convertir a Megabytes
+                    double fileSizeInMB = (double)fileSizeInBytes / 1024 / 1024;
+
+                    // Verificar si el tamaño del archivo es mayor que el máximo permitido
+                    if (fileSizeInMB > maxFileSizeMB)
+                    {
+                        throw new Exception($"El archivo es demasiado grande. Debe ser menor de {maxFileSizeMB} MB.");
+                    }
+
                     while (System.IO.File.Exists(filePath))
                     {
                         var newFileName = $"{fileNameWithoutExtension}({counter}){extension}";
