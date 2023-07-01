@@ -107,12 +107,12 @@ namespace UBSocial.Controllers
 
                 }
 
-                return StatusCode(500, success);
-                
+                return StatusCode(400, "Se enviaron campos incompletos o erroneos");
+
             }
             catch
             {
-                return StatusCode(500, success);
+                return StatusCode(500, "Error al intentar eliminar la propuesta");
             }
         }
 
@@ -143,14 +143,18 @@ namespace UBSocial.Controllers
                     }
                     else
                     {
-                        return StatusCode(500, success);
+                        return StatusCode(400, "Se enviaron campos incompletos o erroneos");
                     }
                 }
+
+                return StatusCode(400, "Se enviaron campos incompletos o erroneos");
+
             }
             catch
             {
+                return StatusCode(500, success);
             }
-            return StatusCode(500, success);
+            
         }
 
         // UPDATE
@@ -180,18 +184,20 @@ namespace UBSocial.Controllers
                     }
                     else
                     {
-                        return StatusCode(500, success);
+                        return StatusCode(400, "Se enviaron campos incompletos o erroneos");
                     }
                 }
                 else
                 {
-                    success = "El titulo y la descripcion no pueden estar vacios";
+                    return StatusCode(400, "Se enviaron campos incompletos o erroneos");
                 }
+
             }
             catch
             {
+                return StatusCode(500, success);
             }
-            return StatusCode(500, success);
+            
         }
 
     }

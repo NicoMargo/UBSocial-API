@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -120,12 +121,12 @@ namespace UBSocial.Controllers
 
                 }
 
-                return StatusCode(500, success);
+                return StatusCode(400, "Se enviaron campos incompletos");
 
             }
             catch
             {
-                return StatusCode(500, success);
+                return StatusCode(500, "Error al intentar eliminar el contenido descargable");
             }
         }
 
@@ -149,6 +150,25 @@ namespace UBSocial.Controllers
                     var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(originalFilePath);
                     var extension = Path.GetExtension(originalFilePath);
                     var counter = 1;
+
+                    const int maxFileSizeMB = 15;
+                    FileInfo fileInfo = new FileInfo(filePath);
+
+                    // Obtener el tamaño del archivo en bytes
+                    long fileSizeInBytes = downloadableContent.File.Length;
+
+                    // Convertir a Kilobytes
+                    double fileSizeInKB = fileSizeInBytes / 1024;
+
+                    // Convertir a Megabytes
+                    double fileSizeInMB = fileSizeInKB / 1024;
+
+                    // Verificar si el tamaño del archivo es mayor que el máximo permitido
+                    if (fileSizeInMB > maxFileSizeMB)
+                    {
+                        success = ($"El archivo es demasiado grande. Debe ser menor de {maxFileSizeMB} MB.");
+                        return StatusCode(400, success);
+                    }
 
                     while (System.IO.File.Exists(filePath))
                     {
@@ -178,14 +198,22 @@ namespace UBSocial.Controllers
 
                     else
                     {
-                        return StatusCode(500, success);
+                        return StatusCode(400, "Se enviaron campos incompletos o erroneos");
                     }
                 }
+
+                return StatusCode(400, "Se enviaron campos incompletos o erroneos");
+
             }
-            catch
+            catch (NullReferenceException ex)
             {
+                return StatusCode(400, "Se enviaron campos incompletos");
             }
-            return StatusCode(500, success);
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error al crear el contenido descargable");
+            }
+
         }
 
         // DOWNLOAD
@@ -196,7 +224,7 @@ namespace UBSocial.Controllers
         [Route("download/{URL}")]
         public IActionResult Download(string URL)
         {
-            string success = "Error al crear el contenido";
+            string success;
             int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
             try
@@ -228,14 +256,17 @@ namespace UBSocial.Controllers
 
                 else
                 {
-                    success = "Debe subir un archivo para poder descargar el contenido.";
-                    return StatusCode(500, success);
+                    return StatusCode(400, "Se enviaron campos incompletos o erroneos");
                 }
 
             }
-            catch
+            catch (NullReferenceException ex)
             {
-                return StatusCode(500, success);
+                return StatusCode(400, "Se enviaron campos incompletos");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error al crear el contenido descargable");
             }
 
         }

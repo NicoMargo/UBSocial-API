@@ -123,7 +123,7 @@ namespace UBSocial.Controllers
 
                 }
 
-                return StatusCode(500, success);
+                return StatusCode(400, "Se enviaron campos incompletos o erroneos");
 
             }
             catch
@@ -151,21 +151,31 @@ namespace UBSocial.Controllers
                     var originalFilePath = filePath;
                     var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(originalFilePath);
                     var extension = Path.GetExtension(originalFilePath);
+
+                    if (extension != ".jpg" && extension != ".png" && extension != ".gif")
+                    {
+                        return StatusCode(400, "El formato del archivo no es aceptado. Por favor verifique que sea .PNG/.JPG/.GIF");
+                    }
+
                     var counter = 1;
 
                     const int maxFileSizeMB = 15;
                     FileInfo fileInfo = new FileInfo(filePath);
 
                     // Obtener el tamaño del archivo en bytes
-                    long fileSizeInBytes = fileInfo.Length;
+                    long fileSizeInBytes = activity.File.Length;
+
+                    // Convertir a Kilobytes
+                    double fileSizeInKB = fileSizeInBytes / 1024;
 
                     // Convertir a Megabytes
-                    double fileSizeInMB = (double)fileSizeInBytes / 1024 / 1024;
+                    double fileSizeInMB = fileSizeInKB / 1024;
 
                     // Verificar si el tamaño del archivo es mayor que el máximo permitido
                     if (fileSizeInMB > maxFileSizeMB)
                     {
-                        throw new Exception($"El archivo es demasiado grande. Debe ser menor de {maxFileSizeMB} MB.");
+                        success = ($"El archivo es demasiado grande. Debe ser menor de {maxFileSizeMB} MB.");
+                        return StatusCode(400, success);
                     }
 
                     while (System.IO.File.Exists(filePath))
@@ -173,11 +183,6 @@ namespace UBSocial.Controllers
                         var newFileName = $"{fileNameWithoutExtension}({counter}){extension}";
                         filePath = Path.Combine("WWWRoot", "ActivityPhotos", newFileName);
                         counter++;
-                    }
-
-                    using (var stream = System.IO.File.Create(filePath))
-                    {
-                        activity.File.CopyToAsync(stream);
                     }
 
                     Dictionary<string, object> args = new Dictionary<string, object> {
@@ -193,16 +198,21 @@ namespace UBSocial.Controllers
 
                     if (success == "1")
                     {
+                        using (var stream = System.IO.File.Create(filePath))
+                        {
+                            activity.File.CopyToAsync(stream);
+                        }
+
                         return Ok();
                     }
 
                     else
                     {
-                        return StatusCode(500, success);
+                        return StatusCode(400, "Se enviaron campos incompletos o erroneos");
                     }
                 }
 
-                return StatusCode(400, "Se enviaron campos incompletos");
+                return StatusCode(400, "Se enviaron campos incompletos o erroneos");
             }
             catch (NullReferenceException ex)
             {
@@ -234,7 +244,32 @@ namespace UBSocial.Controllers
                     var originalFilePath = filePath;
                     var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(originalFilePath);
                     var extension = Path.GetExtension(originalFilePath);
+
+                    if (extension != ".jpg" && extension != ".png" && extension != ".gif")
+                    {
+                        return StatusCode(400, "El formato del archivo no es aceptado. Por favor verifique que sea .PNG/.JPG/.GIF");
+                    }
+
                     var counter = 1;
+
+                    const int maxFileSizeMB = 15;
+                    FileInfo fileInfo = new FileInfo(filePath);
+
+                    // Obtener el tamaño del archivo en bytes
+                    long fileSizeInBytes = activity.File.Length;
+
+                    // Convertir a Kilobytes
+                    double fileSizeInKB = fileSizeInBytes / 1024;
+
+                    // Convertir a Megabytes
+                    double fileSizeInMB = fileSizeInKB / 1024;
+
+                    // Verificar si el tamaño del archivo es mayor que el máximo permitido
+                    if (fileSizeInMB > maxFileSizeMB)
+                    {
+                        success = ($"El archivo es demasiado grande. Debe ser menor de {maxFileSizeMB} MB.");
+                        return StatusCode(400, success);
+                    }
 
                     while (System.IO.File.Exists(filePath))
                     {
@@ -268,15 +303,19 @@ namespace UBSocial.Controllers
 
                     else
                     {
-                        return StatusCode(500, success);
+                        return StatusCode(400, "Se enviaron campos incompletos o erroneos");
                     }
                 }
 
-                return StatusCode(500, success);
+                return StatusCode(400, "Se enviaron campos incompletos o erroneos");
             }
-            catch
+            catch (NullReferenceException ex)
             {
-                return StatusCode(500, success);
+                return StatusCode(400, "Se enviaron campos incompletos");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error al crear la actividad");
             }
             
         }
@@ -306,13 +345,13 @@ namespace UBSocial.Controllers
 
                 else
                 {
-                    return StatusCode(500, success);
+                    return StatusCode(400, "Se enviaron campos incompletos o erroneos");
                 }
 
             }
             catch
             {
-                return StatusCode(500, success);
+                return StatusCode(500, "Error al crear la actividad");
             }
             
 

@@ -158,7 +158,7 @@ namespace UbSocial.Controllers
         {
             int? userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
-            string success = "";
+            string success = "Error al eliminar el usuario";
             try
             {
                 if (userId > 0)
@@ -174,7 +174,7 @@ namespace UbSocial.Controllers
 
                     }
                 }
-                return BadRequest();
+                return StatusCode(400, "Se enviaron campos incompletos");
             }
             catch
             {
@@ -212,18 +212,19 @@ namespace UbSocial.Controllers
                     }
                     else
                     {
-                        return StatusCode(500, success);
+                        return StatusCode(400, "Se enviaron campos incompletos");
                     }
                 }
                 else
                 {
-                    success = "Hay campos que no pueden estar vacios";
+                    return StatusCode(400, "Se enviaron campos incompletos");
                 }
             }
             catch
             {
+                return StatusCode(500, success);
             }
-            return StatusCode(500, success);
+            
         }
     }
 }
