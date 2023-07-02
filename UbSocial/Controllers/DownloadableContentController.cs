@@ -255,10 +255,9 @@ namespace UBSocial.Controllers
                     return PhysicalFile(filePath, mimeType, URL);
 
                 }
-
                 else
                 {
-                    return StatusCode(400, "Se enviaron campos incompletos o erroneos");
+                    return StatusCode(429, "Debes subir un archivo para poder descargar otros 3 archivos");
                 }
 
             }
