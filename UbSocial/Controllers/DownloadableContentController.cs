@@ -184,7 +184,7 @@ namespace UBSocial.Controllers
 
                     Dictionary<string, object> args = new Dictionary<string, object> {
                          {"pTitle",downloadableContent.Title},
-                         {"pURL","/Content/" + downloadableContent.File.FileName},
+                         {"pURL","Content\\" + downloadableContent.File.FileName},
                          {"pIdSubject",downloadableContent.IdSubject},
                          {"pIdUser",idUser}
                     };
@@ -221,7 +221,7 @@ namespace UBSocial.Controllers
 
         [HttpGet]
         [Authorize]
-        [Route("download")]
+        [Route("download/{URL}")]
         public IActionResult Download(string URL)
         {
             string success;
@@ -238,7 +238,7 @@ namespace UBSocial.Controllers
                 if (success == "True")
                 {
                     // Combina la ruta de la carpeta wwwroot con el nombre del archivo para obtener la ruta completa del archivo.
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "WWWRoot/Content" + URL);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "WWWRoot" + URL);
 
                     // Verifica si el archivo existe
                     if (!System.IO.File.Exists(filePath))
