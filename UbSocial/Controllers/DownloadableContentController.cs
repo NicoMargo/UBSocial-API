@@ -229,6 +229,15 @@ namespace UBSocial.Controllers
 
             try
             {
+                // Combina la ruta de la carpeta wwwroot con el nombre del archivo para obtener la ruta completa del archivo.
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "WWWRoot", URL);
+
+                // Verifica si el archivo existe
+                if (!System.IO.File.Exists(filePath))
+                {
+                    return NotFound();
+                }
+
                 Dictionary<string, object> args = new Dictionary<string, object> {
                     {"pId",idUser}
                 };
@@ -237,14 +246,7 @@ namespace UBSocial.Controllers
 
                 if (success == "True")
                 {
-                    // Combina la ruta de la carpeta wwwroot con el nombre del archivo para obtener la ruta completa del archivo.
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "WWWRoot", URL);
-
-                    // Verifica si el archivo existe
-                    if (!System.IO.File.Exists(filePath))
-                    {
-                        return NotFound();
-                    }
+                    
 
                     // Obtiene el tipo MIME del archivo (importante para saber cómo el navegador debe manejar la descarga)
                     var mimeType = GetMimeType(filePath);
