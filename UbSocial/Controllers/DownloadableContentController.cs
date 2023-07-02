@@ -221,7 +221,7 @@ namespace UBSocial.Controllers
 
         [HttpGet]
         [Authorize]
-        [Route("download/{URL}")]
+        [Route("download")]
         public IActionResult Download(string URL)
         {
             string success;
