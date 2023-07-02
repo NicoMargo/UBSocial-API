@@ -142,7 +142,7 @@ namespace UBSocial.Controllers
 
             try
             {
-                if (downloadableContent.File.FileName != null)
+                if (downloadableContent.Title != null && downloadableContent.File.FileName != null  && downloadableContent.IdSubject != null)
                 {
                     var filePath = Path.Combine(Directory.GetCurrentDirectory(), "WWWRoot", "Content", downloadableContent.File.FileName);
 
@@ -168,19 +168,7 @@ namespace UBSocial.Controllers
                     {
                         success = ($"El archivo es demasiado grande. Debe ser menor de {maxFileSizeMB} MB.");
                         return StatusCode(400, success);
-                    }
-
-                    while (System.IO.File.Exists(filePath))
-                    {
-                        var newFileName = $"{fileNameWithoutExtension}({counter}){extension}";
-                        filePath = Path.Combine("WWWRoot", "Content", newFileName);
-                        counter++;
-                    }
-
-                    using (var stream = System.IO.File.Create(filePath))
-                    {
-                        downloadableContent.File.CopyToAsync(stream);
-                    }
+                    }                   
 
                     Dictionary<string, object> args = new Dictionary<string, object> {
                          {"pTitle",downloadableContent.Title},
@@ -193,6 +181,17 @@ namespace UBSocial.Controllers
 
                     if (success == "3")
                     {
+                        while (System.IO.File.Exists(filePath))
+                        {
+                            var newFileName = $"{fileNameWithoutExtension}({counter}){extension}";
+                            filePath = Path.Combine("WWWRoot", "Content", newFileName);
+                            counter++;
+                        }
+
+                        using (var stream = System.IO.File.Create(filePath))
+                        {
+                            downloadableContent.File.CopyToAsync(stream);
+                        }
                         return Ok();
                     }
 
@@ -245,8 +244,7 @@ namespace UBSocial.Controllers
                 success = DBHelper.callProcedureReader("spCanDownloadableContent", args);
 
                 if (success == "True")
-                {
-                    
+                {                    
 
                     // Obtiene el tipo MIME del archivo (importante para saber cómo el navegador debe manejar la descarga)
                     var mimeType = GetMimeType(filePath);
