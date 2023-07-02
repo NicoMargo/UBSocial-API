@@ -217,7 +217,7 @@ namespace UBSocial.Controllers
         }
 
         // DOWNLOAD
-        // Ejemplo: (GET) localhost:7004/downloadableContent/download/pato.gif/1
+        // Ejemplo: (GET) localhost:7004/downloadableContent/download/pato.gif
 
         [HttpGet]
         [Authorize]
@@ -238,7 +238,7 @@ namespace UBSocial.Controllers
                 if (success == "True")
                 {
                     // Combina la ruta de la carpeta wwwroot con el nombre del archivo para obtener la ruta completa del archivo.
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "WWWRoot/Content", URL);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "WWWRoot/Content" + URL);
 
                     // Verifica si el archivo existe
                     if (!System.IO.File.Exists(filePath))
