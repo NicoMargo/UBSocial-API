@@ -214,7 +214,7 @@ namespace UBSocial.Controllers
 
                     success = DBHelper.CallNonQuery("spActivityCreate", args);
 
-                    if (success == "1")
+                    if (success == "2")
                     {
                         using (var stream = System.IO.File.Create(filePath))
                         {
