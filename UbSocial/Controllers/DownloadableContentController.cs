@@ -184,7 +184,7 @@ namespace UBSocial.Controllers
 
                     Dictionary<string, object> args = new Dictionary<string, object> {
                          {"pTitle",downloadableContent.Title},
-                         {"pURL","Content\\" + downloadableContent.File.FileName},
+                         {"pURL","Content\\" + $"{fileNameWithoutExtension}({counter}){extension}"},
                          {"pIdSubject",downloadableContent.IdSubject},
                          {"pIdUser",idUser}
                     };
@@ -193,12 +193,6 @@ namespace UBSocial.Controllers
 
                     if (success == "3")
                     {
-                        while (System.IO.File.Exists(filePath))
-                        {
-                            var newFileName = $"{fileNameWithoutExtension}({counter}){extension}";
-                            filePath = Path.Combine("WWWRoot", "Content", newFileName);
-                            counter++;
-                        }
 
                         using (var stream = System.IO.File.Create(filePath))
                         {

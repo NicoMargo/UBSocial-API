@@ -208,7 +208,7 @@ namespace UBSocial.Controllers
                          {"pDescription",activity.Description},
                          {"pContact",activity.Contact},
                          {"pDateFinishActivity",activity.ActivityDateFinished},
-                         {"pURLphotos","/ActivityPhotos/" + activity.File.FileName},
+                         {"pURLphotos","/ActivityPhotos/" + $"{fileNameWithoutExtension}({counter}){extension}"},
                          {"pIdUser",idUser}
                     };
 
@@ -305,18 +305,13 @@ namespace UBSocial.Controllers
                         counter++;
                     }
 
-                    using (var stream = System.IO.File.Create(filePath))
-                    {
-                        await activity.File.CopyToAsync(stream);
-                    }
-
                     Dictionary<string, object> args = new Dictionary<string, object> {
                          {"pTitle",activity.Title},
                          {"pDescription",activity.Description},
                          {"pContact",activity.Contact},
                          // {"pActivityDate",activity.ActivityDate},
                          {"pDateFinishActivity",activity.ActivityDateFinished},
-                         {"pURLphotos","/ActivityPhotos/" + activity.File.FileName},
+                         {"pURLphotos","/ActivityPhotos/" + $"{fileNameWithoutExtension}({counter}){extension}"},
                          {"pId",id},
                          {"pIdUser",idUser}
                     };
@@ -325,6 +320,11 @@ namespace UBSocial.Controllers
 
                     if (success == "1")
                     {
+                        using (var stream = System.IO.File.Create(filePath))
+                        {
+                            await activity.File.CopyToAsync(stream);
+                        }
+
                         return Ok();
                     }
 
