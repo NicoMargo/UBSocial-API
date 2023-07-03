@@ -19,13 +19,18 @@ namespace UBSocial.Controllers
         [HttpGet]
         public IActionResult ActivityGet(int page = 0)
         {
-            int? userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            int? idUser = null;
+
+            if (User.FindFirst(ClaimTypes.NameIdentifier)?.Value != null)
+            {
+                idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            }
 
             try
             {
                 Dictionary<string, object> args = new Dictionary<string, object> {
                     {"pPage",page},
-                    {"pIdUser",userId}
+                    {"pIdUser",idUser}
                 };
                 return Ok(DBHelper.callProcedureReader("spActivityGetAll", args));
             }
@@ -41,13 +46,18 @@ namespace UBSocial.Controllers
         [HttpGet("ActivityIdentifier/{id}")]
         public IActionResult ActivityGetById(int id)
         {
-            int? userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            int? idUser = null;
+
+            if (User.FindFirst(ClaimTypes.NameIdentifier)?.Value != null)
+            {
+                idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            }
 
             try
             {
                 Dictionary<string, object> args = new Dictionary<string, object> {
                     {"pId",id},
-                    {"pIdUser",userId}
+                    {"pIdUser",idUser}
                 };
                 return Ok(DBHelper.callProcedureReader("spActivityGetById", args));
             }
@@ -64,12 +74,17 @@ namespace UBSocial.Controllers
         [Authorize]
         public IActionResult ActivityGetByIdUser()
         {
-            int? userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            int? idUser = null;
+
+            if (User.FindFirst(ClaimTypes.NameIdentifier)?.Value != null)
+            {
+                idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            }
 
             try
             {
                 Dictionary<string, object> args = new Dictionary<string, object> {
-                    {"pIdUser",userId}
+                    {"pIdUser",idUser}
                 };
                 return Ok(DBHelper.callProcedureReader("spActivityGetByIdUser", args));
             }
@@ -85,19 +100,24 @@ namespace UBSocial.Controllers
         [HttpGet("currentTitle/{title}")]
         public IActionResult ActivityGetByTitle(string title)
         {
-            int? userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            int? idUser = null;
+
+            if (User.FindFirst(ClaimTypes.NameIdentifier)?.Value != null)
+            {
+                idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            }
 
             try
             {
                 Dictionary<string, object> args = new Dictionary<string, object> {
                     {"pTitle",title},
-                    {"pIdUser",userId}
+                    {"pIdUser",idUser}
                 };
                 return Ok(DBHelper.callProcedureReader("spActivityGetByTitle", args));
             }
             catch
             {
-                return StatusCode(500, "Error al obtener la informacion de las actividades");
+                return StatusCode(400, "Titulo no encontrado. Por favor intente denuevo");
             }
         }
 
@@ -149,7 +169,8 @@ namespace UBSocial.Controllers
         public async Task<IActionResult> Create([FromForm] Activity activity)
         {
             string success = "Error al crear la actividad";
-            int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            int? idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value); ;
 
             try
             {
