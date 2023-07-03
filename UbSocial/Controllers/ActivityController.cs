@@ -152,9 +152,9 @@ namespace UBSocial.Controllers
                     var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(originalFilePath);
                     var extension = Path.GetExtension(originalFilePath);
 
-                    if (extension != ".jpg" && extension != ".png" && extension != ".gif")
+                    if (extension != ".jpg" && extension != ".png" && extension != ".gif" && extension != ".jpeg")
                     {
-                        return StatusCode(400, "El formato del archivo no es aceptado. Por favor verifique que sea .PNG/.JPG/.GIF");
+                        return StatusCode(400, "El formato del archivo no es aceptado. Por favor verifique que sea .PNG/.JPG/.GIF/ .JPEG");
                     }
 
                     var counter = 1;
