@@ -165,14 +165,7 @@ namespace UBSocial.Controllers
 
                     if (extension != ".jpg" && extension != ".png" && extension != ".gif" && extension != ".jpeg")
                     {
-                        return StatusCode(400, "El formato del archivo no es aceptado. Por favor verifique que sea .PNG/.JPG/.GIF/ .JPEG");
-                    }
-
-                    if (activity.ActivityDateFinished < currentDate)
-                    {
-
-                        return StatusCode(400, "La fecha de finalizacion de la actividad es invalida. Vuelve a ingresar una pasada la fecha actual.");
-
+                        return StatusCode(400, "El formato del archivo no es aceptado. Por favor verifique que sea .PNG / .JPG / .GIF / .JPEG");
                     }
 
                     if (activity.ActivityDateFinished < currentDate)
@@ -272,9 +265,9 @@ namespace UBSocial.Controllers
 
                     DateTime currentDate = DateTime.Today;
 
-                    if (extension != ".jpg" && extension != ".png" && extension != ".gif")
+                    if (extension != ".jpg" && extension != ".png" && extension != ".gif" && extension != ".jpeg")
                     {
-                        return StatusCode(400, "El formato del archivo no es aceptado. Por favor verifique que sea .PNG/.JPG/.GIF");
+                        return StatusCode(400, "El formato del archivo no es aceptado. Por favor verifique que sea .PNG / .JPG / .GIF / .JPEG");
                     }
 
                     if (activity.ActivityDateFinished < currentDate)
@@ -358,7 +351,7 @@ namespace UBSocial.Controllers
         // Ejemplo: (POST) localhost:7004/activity/join
 
         [HttpPost("join/{id}")]
-        public IActionResult ActivityJoin(int id)
+        public IActionResult ActivityManager(int id)
         {
             string success = "Error al unirse a la actividad";
             int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
