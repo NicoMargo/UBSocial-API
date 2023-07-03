@@ -19,10 +19,13 @@ namespace UBSocial.Controllers
         [HttpGet]
         public IActionResult ActivityGet(int page = 0)
         {
+            int? userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
             try
             {
                 Dictionary<string, object> args = new Dictionary<string, object> {
-                    {"pPage",page}
+                    {"pPage",page},
+                    {"pIdUser",userId}
                 };
                 return Ok(DBHelper.callProcedureReader("spActivityGetAll", args));
             }
@@ -38,10 +41,13 @@ namespace UBSocial.Controllers
         [HttpGet("ActivityIdentifier/{id}")]
         public IActionResult ActivityGetById(int id)
         {
+            int? userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
             try
             {
                 Dictionary<string, object> args = new Dictionary<string, object> {
-                    {"pId",id}
+                    {"pId",id},
+                    {"pIdUser",userId}
                 };
                 return Ok(DBHelper.callProcedureReader("spActivityGetById", args));
             }
@@ -79,10 +85,13 @@ namespace UBSocial.Controllers
         [HttpGet("currentTitle/{title}")]
         public IActionResult ActivityGetByTitle(string title)
         {
+            int? userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
             try
             {
                 Dictionary<string, object> args = new Dictionary<string, object> {
-                    {"pTitle",title}
+                    {"pTitle",title},
+                    {"pIdUser",userId}
                 };
                 return Ok(DBHelper.callProcedureReader("spActivityGetByTitle", args));
             }
@@ -137,7 +146,7 @@ namespace UBSocial.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult Create([FromForm] Activity activity)
+        public async Task<IActionResult> Create([FromForm] Activity activity)
         {
             string success = "Error al crear la actividad";
             int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
@@ -152,9 +161,18 @@ namespace UBSocial.Controllers
                     var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(originalFilePath);
                     var extension = Path.GetExtension(originalFilePath);
 
+                    DateTime currentDate = DateTime.Today;
+
                     if (extension != ".jpg" && extension != ".png" && extension != ".gif")
                     {
                         return StatusCode(400, "El formato del archivo no es aceptado. Por favor verifique que sea .PNG/.JPG/.GIF");
+                    }
+
+                    if (activity.ActivityDateFinished < currentDate)
+                    {
+
+                        return StatusCode(400, "La fecha de finalizacion de la actividad es invalida. Vuelve a ingresar una pasada la fecha actual.");
+
                     }
 
                     var counter = 1;
@@ -200,7 +218,7 @@ namespace UBSocial.Controllers
                     {
                         using (var stream = System.IO.File.Create(filePath))
                         {
-                            activity.File.CopyToAsync(stream);
+                            await activity.File.CopyToAsync(stream);
                         }
 
                         return Ok();
@@ -230,7 +248,7 @@ namespace UBSocial.Controllers
 
         [HttpPut("{id}")]
         [Authorize]
-        public IActionResult Update([FromForm] Activity activity, int id)
+        public async Task<IActionResult> Update([FromForm] Activity activity, int id)
         {
             string success = "Error al modificar la actividad";
             int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
@@ -245,9 +263,18 @@ namespace UBSocial.Controllers
                     var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(originalFilePath);
                     var extension = Path.GetExtension(originalFilePath);
 
+                    DateTime currentDate = DateTime.Today;
+
                     if (extension != ".jpg" && extension != ".png" && extension != ".gif")
                     {
                         return StatusCode(400, "El formato del archivo no es aceptado. Por favor verifique que sea .PNG/.JPG/.GIF");
+                    }
+
+                    if (activity.ActivityDateFinished < currentDate)
+                    {
+
+                        return StatusCode(400, "La fecha de finalizacion de la actividad es invalida. Vuelve a ingresar una pasada la fecha actual.");
+
                     }
 
                     var counter = 1;
@@ -280,7 +307,7 @@ namespace UBSocial.Controllers
 
                     using (var stream = System.IO.File.Create(filePath))
                     {
-                        activity.File.CopyToAsync(stream);
+                        await activity.File.CopyToAsync(stream);
                     }
 
                     Dictionary<string, object> args = new Dictionary<string, object> {

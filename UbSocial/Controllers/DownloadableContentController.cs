@@ -135,7 +135,7 @@ namespace UBSocial.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult Create([FromForm] DownloadableContent downloadableContent)
+        public async Task<IActionResult> Create([FromForm] DownloadableContent downloadableContent)
         {
             string success = "Error al crear el contenido";
             int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
@@ -179,7 +179,7 @@ namespace UBSocial.Controllers
 
                     using (var stream = System.IO.File.Create(filePath))
                     {
-                        downloadableContent.File.CopyToAsync(stream);
+                        await downloadableContent.File.CopyToAsync(stream);
                     }
 
                     Dictionary<string, object> args = new Dictionary<string, object> {
