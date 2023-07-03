@@ -168,23 +168,20 @@ namespace UBSocial.Controllers
                     {
                         success = ($"El archivo es demasiado grande. Debe ser menor de {maxFileSizeMB} MB.");
                         return StatusCode(400, success);
-                    }                   
+                    }
+
+                    var newFileName = $"{fileNameWithoutExtension}{extension}";
 
                     while (System.IO.File.Exists(filePath))
                     {
-                        var newFileName = $"{fileNameWithoutExtension}({counter}){extension}";
+                        newFileName = $"{fileNameWithoutExtension}({counter}){extension}";
                         filePath = Path.Combine("WWWRoot", "Content", newFileName);
                         counter++;
                     }
 
-                    using (var stream = System.IO.File.Create(filePath))
-                    {
-                        await downloadableContent.File.CopyToAsync(stream);
-                    }
-
                     Dictionary<string, object> args = new Dictionary<string, object> {
                          {"pTitle",downloadableContent.Title},
-                         {"pURL","Content\\" + $"{fileNameWithoutExtension}({counter}){extension}"},
+                         {"pURL","Content\\" + newFileName},
                          {"pIdSubject",downloadableContent.IdSubject},
                          {"pIdUser",idUser}
                     };
@@ -196,7 +193,7 @@ namespace UBSocial.Controllers
 
                         using (var stream = System.IO.File.Create(filePath))
                         {
-                            downloadableContent.File.CopyToAsync(stream);
+                            await downloadableContent.File.CopyToAsync(stream);
                         }
                         return Ok();
                     }

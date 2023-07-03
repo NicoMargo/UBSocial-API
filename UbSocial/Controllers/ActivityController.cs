@@ -170,9 +170,7 @@ namespace UBSocial.Controllers
 
                     if (activity.ActivityDateFinished < currentDate)
                     {
-
                         return StatusCode(400, "La fecha de finalizacion de la actividad es invalida. Vuelve a ingresar una pasada la fecha actual.");
-
                     }
 
                     var counter = 1;
@@ -196,9 +194,11 @@ namespace UBSocial.Controllers
                         return StatusCode(400, success);
                     }
 
+                    var newFileName = $"{fileNameWithoutExtension}{extension}";
+
                     while (System.IO.File.Exists(filePath))
                     {
-                        var newFileName = $"{fileNameWithoutExtension}({counter}){extension}";
+                        newFileName = $"{fileNameWithoutExtension}({counter}){extension}";
                         filePath = Path.Combine("WWWRoot", "ActivityPhotos", newFileName);
                         counter++;
                     }
@@ -208,7 +208,7 @@ namespace UBSocial.Controllers
                          {"pDescription",activity.Description},
                          {"pContact",activity.Contact},
                          {"pDateFinishActivity",activity.ActivityDateFinished},
-                         {"pURLphotos","/ActivityPhotos/" + $"{fileNameWithoutExtension}({counter}){extension}"},
+                         {"pURLphotos","/ActivityPhotos/" + newFileName},
                          {"pIdUser",idUser}
                     };
 
@@ -272,9 +272,7 @@ namespace UBSocial.Controllers
 
                     if (activity.ActivityDateFinished < currentDate)
                     {
-
                         return StatusCode(400, "La fecha de finalizacion de la actividad es invalida. Vuelve a ingresar una pasada la fecha actual.");
-
                     }
 
                     var counter = 1;
@@ -298,9 +296,11 @@ namespace UBSocial.Controllers
                         return StatusCode(400, success);
                     }
 
+                    var newFileName = $"{fileNameWithoutExtension}{extension}";
+
                     while (System.IO.File.Exists(filePath))
                     {
-                        var newFileName = $"{fileNameWithoutExtension}({counter}){extension}";
+                        newFileName = $"{fileNameWithoutExtension}({counter}){extension}";
                         filePath = Path.Combine("WWWRoot", "ActivityPhotos", newFileName);
                         counter++;
                     }
@@ -311,7 +311,7 @@ namespace UBSocial.Controllers
                          {"pContact",activity.Contact},
                          // {"pActivityDate",activity.ActivityDate},
                          {"pDateFinishActivity",activity.ActivityDateFinished},
-                         {"pURLphotos","/ActivityPhotos/" + $"{fileNameWithoutExtension}({counter}){extension}"},
+                         {"pURLphotos","/ActivityPhotos/" + newFileName},
                          {"pId",id},
                          {"pIdUser",idUser}
                     };
