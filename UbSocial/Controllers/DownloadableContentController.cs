@@ -135,7 +135,7 @@ namespace UBSocial.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult Create([FromForm] DownloadableContent downloadableContent)
+        public async Task<IActionResult> Create([FromForm] DownloadableContent downloadableContent)
         {
             string success = "Error al crear el contenido";
             int idUser = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
@@ -169,6 +169,18 @@ namespace UBSocial.Controllers
                         success = ($"El archivo es demasiado grande. Debe ser menor de {maxFileSizeMB} MB.");
                         return StatusCode(400, success);
                     }                   
+
+                    while (System.IO.File.Exists(filePath))
+                    {
+                        var newFileName = $"{fileNameWithoutExtension}({counter}){extension}";
+                        filePath = Path.Combine("WWWRoot", "Content", newFileName);
+                        counter++;
+                    }
+
+                    using (var stream = System.IO.File.Create(filePath))
+                    {
+                        await downloadableContent.File.CopyToAsync(stream);
+                    }
 
                     Dictionary<string, object> args = new Dictionary<string, object> {
                          {"pTitle",downloadableContent.Title},
