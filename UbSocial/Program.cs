@@ -34,7 +34,8 @@ builder.Services.AddCors(options =>
                           policy =>
                           {
                               policy.WithOrigins(
-                                  "http://localhost:3000", 
+                                  "http://localhost:3000",
+                                  "http://localhost:80",
                                   "http://frontadmin.ayukelen.com.ar", 
                                   "http://ktm.ddns.net:41678")
                                     .AllowAnyHeader()
