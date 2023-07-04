@@ -196,11 +196,10 @@ namespace UbSocial.Controllers
 
             try
             {
-                if (user.Email != null && user.Password != null && user.Name != null && user.Surname != null && user.Id != null)
+                if (user.Email != null && user.Name != null && user.Surname != null && user.Id != null)
                 {
                     Dictionary<string, object> args = new Dictionary<string, object> {
                          {"pEmail",user.Email},
-                         {"pPassword",user.Password},
                          {"pName",user.Name},
                          {"pSurname",user.Surname},
                          {"pId",user.Id}
