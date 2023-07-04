@@ -51,7 +51,16 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+app.Use((context, next) =>
+{
+    if (context.Request.Method == "OPTIONS")
+    {
+        context.Response.StatusCode = StatusCodes.Status200OK;
+        return Task.CompletedTask;
+    }
 
+    return next();
+});
 app.UseCors("_corsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
