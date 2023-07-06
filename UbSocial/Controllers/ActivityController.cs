@@ -184,7 +184,7 @@ namespace UBSocial.Controllers
 
                     DateTime currentDate = DateTime.Today;
 
-                    if (extension != ".jpg" && extension != ".png" && extension != ".gif" && extension != ".jpeg")
+                    if (extension != ".jpg" && extension != ".png" && extension != ".gif" && extension != ".jpeg" && extension != ".JPG" && extension != ".PNG" && extension != ".GIF" && extension != ".JPEG")
                     {
                         return StatusCode(400, "El formato del archivo no es aceptado. Por favor verifique que sea .PNG / .JPG / .GIF / .JPEG");
                     }
@@ -286,7 +286,7 @@ namespace UBSocial.Controllers
 
                     DateTime currentDate = DateTime.Today;
 
-                    if (extension != ".jpg" && extension != ".png" && extension != ".gif" && extension != ".jpeg")
+                    if (extension != ".jpg" && extension != ".png" && extension != ".gif" && extension != ".jpeg" && extension != ".JPG" && extension != ".PNG" && extension != ".GIF" && extension != ".JPEG")
                     {
                         return StatusCode(400, "El formato del archivo no es aceptado. Por favor verifique que sea .PNG / .JPG / .GIF / .JPEG");
                     }
