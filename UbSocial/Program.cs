@@ -30,17 +30,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 //Cors
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("_corsPolicy",
+    options.AddPolicy(name: "_corsPolicy",
                           policy =>
                           {
-                              policy.WithOrigins(
-                                  "http://localhost:3000",
-                                  "http://localhost:80",
-                                  "http://frontadmin.ayukelen.com.ar", 
-                                  "http://ktm.ddns.net:41678")
-                                    .AllowAnyHeader()
-                                    .AllowAnyMethod()
-                                    .AllowCredentials();
+                              policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+
                           });
 });
 
